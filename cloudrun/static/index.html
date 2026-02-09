@@ -1,0 +1,3133 @@
+<!-- cloudrun/static/index.html -->
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Dev Caddie - Content Intelligence Hub</title>
+    <link rel="icon" type="image/x-icon" href="/static/favicon.ico">
+    <link rel="icon" type="image/png" sizes="32x32" href="/static/favicon-32x32.png">
+    <link rel="shortcut icon" href="/static/favicon.ico">
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/apple-touch-icon.png">
+    <link rel="apple-touch-icon-precomposed" sizes="180x180" href="/static/apple-touch-icon-precomposed.png">
+    <meta property="og:title" content="Dev Caddie - Content Intelligence Hub">
+    <meta property="og:description" content="AI‑engineered developer signal for your content">
+    <meta property="og:url" content="https://devcaddie.com">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://devcaddie.com/static/og-image.png">
+    <meta property="og:image:width" content="1200">
+    <meta property="og:image:height" content="630">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:image" content="https://devcaddie.com/static/og-image.png">
+    <!-- Tailwind Removed -->
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: #F0F8FF;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: #39445B;
+            padding: 20px 0;
+            border-bottom: 1px solid #2d3649;
+        }
+
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            color: white;
+            font-size: 24px;
+            font-weight: 700;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links a {
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+
+        .nav-links a:hover {
+            background: rgba(255, 255, 255, 0.2);
+        }
+
+        .tabs {
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+            display: flex;
+            gap: 10px;
+        }
+
+        .tab {
+            padding: 15px 30px;
+            background: #9F97B8;
+            color: white;
+            border: none;
+            border-radius: 10px 10px 0 0;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 600;
+            transition: all 0.3s;
+        }
+
+        .tab:hover {
+            background: #8f87a8;
+        }
+
+        .tab.active {
+            background: white;
+            color: #39445B;
+        }
+
+        /* Briefing Section Styles */
+        .briefing-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .briefing-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 20px;
+        }
+
+        .live-indicator {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #ede9f5;
+            color: #39445B;
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .live-dot {
+            width: 10px;
+            height: 10px;
+            background: #9F97B8;
+            border-radius: 50%;
+            animation: pulse 1.5s infinite;
+        }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+
+            50% {
+                transform: scale(1.1);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(0.95);
+                opacity: 0.7;
+            }
+        }
+
+        /* Briefing & Live Audio Styles */
+        .briefing-card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+            margin-bottom: 25px;
+            border-left: 5px solid #39445B;
+        }
+
+        .live-controls {
+            margin-top: 20px;
+            padding: 20px;
+            background: #f8fafc;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .live-btn {
+            background: #9F97B8;
+            color: white;
+            border: none;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            cursor: pointer;
+            transition: all 0.2s;
+            box-shadow: 0 4px 6px rgba(159, 151, 184, 0.3);
+        }
+
+        .live-btn:hover {
+            background: #8f87a8;
+            transform: scale(1.05);
+        }
+
+        .live-btn:disabled {
+            background: #cbd5e0;
+            cursor: not-allowed;
+            transform: none;
+            box-shadow: none;
+        }
+
+        /* Ensure the purple is only there when 'Live' is first clicked or inactive */
+        .live-btn.inactive {
+            background: #9F97B8;
+        }
+
+        .visualizer-container {
+            background: linear-gradient(135deg, rgba(20, 24, 38, 0.95), rgba(17, 24, 39, 0.9));
+            border: 1px solid rgba(124, 58, 237, 0.35);
+            border-radius: 16px;
+            padding: 10px 12px;
+            width: 100%;
+            max-width: 400px;
+            box-shadow: 0 12px 28px rgba(15, 23, 42, 0.35), inset 0 0 30px rgba(124, 58, 237, 0.08);
+        }
+
+        #mic-visualizer {
+            width: 100%;
+            /* Responsively fills the container */
+            height: 120px;
+            /* Visual height on the screen */
+            display: block;
+            filter: drop-shadow(0 6px 10px rgba(124, 58, 237, 0.25));
+        }
+
+        #mic-status {
+            color: #94a3b8;
+            font-family: 'Inter', sans-serif;
+            display: block;
+            text-align: center;
+            margin-top: 5px;
+        }
+
+        /* AI is active (Blue) */
+        .gemini-active {
+            background-color: #3182ce !important;
+            /* Solid Blue */
+            box-shadow: 0 0 20px rgba(66, 153, 225, 0.9) !important;
+            border: 2px solid #4299e1 !important;
+        }
+
+        /* User is speaking (Purple) */
+        .listening-glow {
+            background-color: #9F97B8 !important;
+            /* Pastel Purple */
+            box-shadow: 0 0 20px rgba(159, 151, 184, 0.9) !important;
+            border: 2px solid #8f87a8 !important;
+            animation: pulse-purple 1.5s infinite ease-in-out;
+        }
+
+        @keyframes pulse-purple {
+            0% {
+                transform: scale(1);
+            }
+
+            50% {
+                transform: scale(1.01);
+                opacity: 0.9;
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        /* Admin Styles */
+        .admin-panel {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+        }
+
+        .admin-card {
+            border: 1px solid #e2e8f0;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        /* Lecture Styles */
+        .lecture-card {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 12px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            transition: transform 0.2s;
+        }
+
+        .lecture-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .tab.active {
+            background: white;
+            color: #39445B;
+        }
+
+        .content {
+            max-width: 1200px;
+            margin: 0 auto 30px;
+            padding: 0 20px;
+        }
+
+        .tab-content {
+            display: none;
+            background: white;
+            border-radius: 0 16px 16px 16px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            animation: fadeIn 0.3s ease-out;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .project-header {
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .project-header h1 {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .project-header p {
+            font-size: 1.2em;
+            color: #666;
+        }
+
+        .tags {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+            flex-wrap: wrap;
+        }
+
+        .tag {
+            padding: 6px 12px;
+            background: #9F97B8;
+            color: white;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .tag.tag-teal {
+            background: #88B3BA;
+        }
+
+        .tag.tag-rose {
+            background: #BA8891;
+        }
+
+        .tag.tag-slate {
+            background: #4A5568;
+        }
+
+        .project-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .project-links a {
+            padding: 12px 24px;
+            background: #9F97B8;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .project-links a:hover {
+            background: #8f87a8;
+        }
+
+        .project-links a.secondary {
+            background: #f0f0f0;
+            color: #333;
+        }
+
+        .project-links a.secondary:hover {
+            background: #e0e0e0;
+        }
+
+        /* Add previous styles for chat interface, features, etc. */
+        /* ... (keep all the chat styles from before) ... */
+
+        /* Chat Interface Styles */
+        .chat-container {
+            border: 1px solid #ddd;
+            border-radius: 12px;
+            overflow: hidden;
+            background: white;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+            /* Fix cramping: add margin and height */
+            margin-top: 40px;
+            margin-bottom: 40px;
+            display: flex;
+            flex-direction: column;
+            height: 600px;
+            /* Explicit height */
+        }
+
+        .chat-header {
+            background: #39445B;
+            color: white;
+            padding: 15px 20px;
+            border-bottom: 1px solid #C1CBCA;
+        }
+
+        .chat-header h3 {
+            margin: 0;
+            font-size: 1.1rem;
+        }
+
+        .chat-messages {
+            flex-grow: 1;
+            padding: 20px;
+            overflow-y: auto;
+            background: #f8f9fa;
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .message {
+            max-width: 80%;
+            padding: 12px 16px;
+            border-radius: 12px;
+            line-height: 1.5;
+            font-size: 0.95rem;
+            position: relative;
+        }
+
+        .bot-message {
+            background: white;
+            border: 1px solid #e2e8f0;
+            color: #2d3748;
+            align-self: flex-start;
+            border-bottom-left-radius: 2px;
+        }
+
+        .user-message {
+            background: #9F97B8;
+            color: white;
+            align-self: flex-end;
+            border-bottom-right-radius: 2px;
+            box-shadow: 0 2px 4px rgba(102, 126, 234, 0.2);
+        }
+
+        .chat-input-area {
+            padding: 20px;
+            background: white;
+            border-top: 1px solid #e2e8f0;
+            display: flex;
+            gap: 10px;
+        }
+
+        .chat-input-area input {
+            flex-grow: 1;
+            padding: 12px 15px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: border-color 0.2s;
+        }
+
+        .chat-input-area input:focus {
+            border-color: #39445B;
+            outline: none;
+        }
+
+        .chat-input-area button {
+            padding: 0 25px;
+            background: #9F97B8;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.2s;
+        }
+
+        .chat-input-area button:hover {
+            background: #C1CBCA;
+        }
+
+        .live-dashboard {
+            margin-top: 30px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+        }
+
+        .chart-container {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.05);
+        }
+
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .refresh-btn {
+            background: transparent;
+            border: 1px solid #BA8891;
+            color: #BA8891;
+            padding: 6px 14px;
+            border-radius: 16px;
+            cursor: pointer;
+            font-size: 0.85rem;
+            transition: all 0.15s ease;
+        }
+
+        .refresh-btn:hover {
+            background: #BA8891;
+            color: white;
+        }
+
+        .refresh-btn:active {
+            transform: scale(0.95);
+            background: #9a6a72;
+            border-color: #9a6a72;
+        }
+
+        .kpi-card {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            border: 1px solid #eee;
+            text-align: center;
+        }
+
+        .kpi-card .value {
+            font-size: 24px;
+            font-weight: 800;
+            color: #39445B;
+        }
+
+
+
+        .kpi-card .label {
+            font-size: 13px;
+            color: #666;
+            margin-top: 5px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Results Metrics */
+        .metric-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-top: 20px;
+        }
+
+        .metric {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border: 1px solid #edf2f7;
+        }
+
+        .metric-value {
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: #2b6cb0;
+        }
+
+        .metric-label {
+            font-size: 0.8rem;
+            color: #718096;
+            text-transform: uppercase;
+            margin-top: 5px;
+        }
+
+        /* Feed Switcher Styles */
+        .feed-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .feed-tabs {
+            display: flex;
+            gap: 10px;
+            overflow-x: auto;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+            margin-bottom: 20px;
+        }
+
+        .feed-tab {
+            padding: 10px 20px;
+            border-radius: 20px;
+            /* Pill shape */
+            background: #f7fafc;
+            border: 1px solid #edf2f7;
+            cursor: pointer;
+            white-space: nowrap;
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            color: #4a5568;
+            font-weight: 500;
+        }
+
+        .feed-tab:hover {
+            background: #edf2f7;
+            transform: translateY(-1px);
+        }
+
+        .feed-tab.active {
+            background: #9F97B8;
+            color: white;
+            border-color: #9F97B8;
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+
+        .feed-header-info {
+            background: #F0F8FF;
+            border-left: 4px solid #9F97B8;
+            padding: 15px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+            color: #39445B;
+        }
+
+        .feed-header-info h3 {
+            margin: 0 0 5px 0;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .article-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .article-card:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+        }
+
+        .badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+
+        .badge-content-type {
+            background: #e2e8f0;
+            color: #475569;
+        }
+
+        .badge-fresh {
+            background: #ede9f5;
+            color: #39445B;
+            border: 1px solid #9F97B8;
+        }
+
+        .badge-viral {
+            background: #fae8ff;
+            color: #d946ef;
+            border: 1px solid #f0abfc;
+        }
+
+        .badge-score {
+            background: #ede9f5;
+            color: #39445B;
+        }
+
+        .contact-links {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+        }
+
+        .contact-links a {
+            padding: 10px 20px;
+            background: #f7fafc;
+            border: 1px solid #e2e8f0;
+            color: #4a5568;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 600;
+            transition: all 0.2s;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .contact-links a:hover {
+            background: #9F97B8;
+            color: white;
+            border-color: #9F97B8;
+            transform: translateY(-2px);
+        }
+
+        .info-section {
+            background: white;
+            border: 1px solid #e2e8f0;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+        }
+
+        .info-section h2 {
+            margin-top: 0;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+            color: #2d3748;
+            border-bottom: 2px solid #f7fafc;
+            padding-bottom: 10px;
+        }
+
+        .tagline {
+            margin-top: 6px;
+            font-size: 0.95rem;
+            color: #cbd5f5;
+            letter-spacing: 0.02em;
+        }
+
+        /* The "Active" Pulse - only active when sessionState is 'ACTIVE' */
+        .listening-glow {
+            animation: breathing-glow 2s infinite ease-in-out;
+            box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+            /* Matching the blue-indigo gradient */
+        }
+
+        @keyframes breathing-glow {
+            0% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0.7);
+                transform: scale(1);
+            }
+
+            50% {
+                box-shadow: 0 0 20px 10px rgba(102, 126, 234, 0);
+                transform: scale(1.05);
+                /* Slightly larger scale for better effect */
+            }
+
+            100% {
+                box-shadow: 0 0 0 0 rgba(102, 126, 234, 0);
+                transform: scale(1);
+            }
+        }
+    </style>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@daily-co/daily-js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+</head>
+
+<body>
+    <header class="header">
+        <div class="header-content">
+            <div class="logo">
+                Dev Caddie
+                <span style="font-size: 0.5em; font-weight: 500; margin-left:10px; opacity:0.7;">Powered by Gemini 3
+                    API</span>
+                <div class="tagline">AI‑engineered developer signal that turns into daily learning and action.</div>
+            </div>
+            <nav class="nav-links">
+                <a href="https://github.com/random-droid/awesome-data-engineering-feeds/blob/main/feeds.opml"
+                    target="_blank">Feed OPML</a>
+            </nav>
+        </div>
+    </header>
+
+    <div class="tabs">
+        <!-- Content Group (Original Purple: #9F97B8) -->
+        <button class="tab active" style="background-color: #9F97B8;" onclick="switchTab('briefing', event)">☕ Morning
+            Briefing</button>
+        <button class="tab" style="background-color: #9F97B8;" onclick="switchTab('feeds', event)">✨ Smart
+            Feeds</button>
+        <button class="tab" style="background-color: #9F97B8;" onclick="switchTab('assistant', event)">🤖 Feed
+            Assistant</button>
+
+        <!-- Video Lectures (Pastel Teal: #88B3BA - Same Hue as Purple) -->
+        <button class="tab" style="background-color: #88B3BA;" onclick="switchTab('lectures', event)">🎓 Video
+            Lectures</button>
+
+        <!-- Code Review (Dusty Rose: #BA8891 - Same Hue as Purple) -->
+        <button class="tab" style="background-color: #BA8891;" onclick="switchTab('llm-observability', event)">🔍
+            Observability</button>
+
+        <!-- Admin (Slate: #4A5568) -->
+        <button class="tab" style="background-color: #4A5568;" onclick="switchTab('admin', event)">⚙️ Admin</button>
+    </div>
+
+    <div class="content">
+        <!-- TAB: SMART FEEDS -->
+        <div id="feeds" class="tab-content">
+            <div class="project-header">
+                <h1>✨ Smart Feeds</h1>
+                <p>My curated RSS feeds scored by Gemini AI + community signals (HN/Lobsters)</p>
+                <div class="tags"><span class="tag">Gemini 3 Flash</span><span class="tag">Apache
+                        Airflow</span><span class="tag">Cloud
+                        Run</span><span class="tag">BigQuery</span><span class="tag">FastAPI</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://github.com/random-droid/awesome-data-engineering-feeds/blob/main/feeds.opml"
+                        target="_blank" class="secondary">📄 Feed Source (OPML)</a>
+                </div>
+            </div>
+            <div
+                style="margin: 20px 0 30px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid #eee;">
+                <img src="/static/images/architecture_banner.png" alt="Content Intelligence Architecture"
+                    style="width: 100%; display: block;">
+            </div>
+
+            <!-- Feed Sub-tabs -->
+            <div id="feed-tabs" class="feed-tabs">
+                <!-- Tabs injected by JS -->
+            </div>
+
+            <div id="feed-info-panel" class="feed-header-info" style="display:none;"></div>
+
+            <div id="feed-content-loader" class="loader" style="display:none;">Loading feeds...</div>
+            <div id="feed-articles-container" class="articles-grid"></div>
+        </div>
+
+        <!-- TAB: ASSISTANT -->
+        <div id="assistant" class="tab-content">
+            <!-- ... content ... -->
+            <div class="project-header">
+                <h1>🤖 Feed Assistant</h1>
+                <p>Natural language search powered by Gemini intent extraction (NL2SQL).</p>
+                <div class="tags"><span class="tag">Gemini 3 Flash</span><span class="tag">Apache Airflow</span><span
+                        class="tag">NL2SQL</span><span class="tag">BigQuery</span><span class="tag">FastAPI</span><span
+                        class="tag">Semantic Search</span>
+                </div>
+            </div>
+            <div class="chat-container">
+                <!-- ... chat UI ... -->
+                <div class="chat-header">
+                    <h3>Gemini 3 Flash Agent</h3>
+                </div>
+                <!-- ... -->
+                <div class="chat-messages" id="chat-messages">
+                    <div class="message bot-message">
+                        Hello! I'm your Feed Assistant. I can answer questions about the articles
+                        in your feed or help you find specific information. How can I help you today?
+                    </div>
+                </div>
+                <div class="chat-input-area">
+                    <input type="text" id="user-input" placeholder="Ask a question about your feeds..."
+                        onkeypress="handleKeyPress(event)">
+                    <button onclick="sendMessage()">Send</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: VIDEO LECTURES (Fixing the nested div here) -->
+        <div id="lectures" class="tab-content">
+            <!-- Removed the infographic images completely -->
+            <div class="project-header">
+                <h1>🎓 Video Lectures</h1>
+                <p>Turn YouTube technical talks into structured study notes with auto-extracted slides.</p>
+                <div class="tags"><span class="tag tag-teal">Gemini 3 Flash</span><span class="tag tag-teal">Multimodal
+                        Video</span><span class="tag tag-teal">yt-dlp</span><span class="tag tag-teal">GCS</span><span
+                        class="tag tag-teal">FFmpeg</span>
+                </div>
+            </div>
+            <div style="max-width: 800px; margin: 0 auto;">
+                <!-- Only list results here -->
+                <div id="lecture-result"></div>
+            </div>
+        </div>
+
+        <!-- TAB: MORNING BRIEFING -->
+        <div id="briefing" class="tab-content active">
+            <div class="project-header">
+                <h1>☕ Morning Briefing</h1>
+                <p>AI anchor delivers your briefing - say "next" to continue or ask questions anytime!</p>
+                <div class="tags"><span class="tag">Gemini 3 Live</span><span class="tag">Pipecat</span><span
+                        class="tag">Apache Airflow</span><span class="tag">Daily WebRTC</span><span
+                        class="tag">WebRTC</span><span class="tag">Voice Activity Detection</span><span
+                        class="tag">Real-time</span>
+                </div>
+            </div>
+
+            <div class="briefing-container">
+                <!-- Script Card -->
+                <div class="briefing-card">
+                    <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;">
+                        <h3 style="margin:0;">📝 Today's Script</h3>
+                        <span class="badge badge-fresh" id="briefing-date">Loading...</span>
+                    </div>
+                    <!-- Live Controls -->
+                    <!-- Unified Live Controls -->
+                    <div class="live-controls"
+                        style="display:flex; flex-direction:column; align-items:center; margin-top:20px;">
+
+                        <!-- Main Action Button (State-Aware) -->
+                        <button id="btn-main-action" onclick="handleMainAction()"
+                            style="width:80px; height:80px; border-radius:50%; background:linear-gradient(135deg, #667EEA, #764BA2); border:none; color:white; font-size:2rem; box-shadow:0 10px 15px -3px rgba(0,0,0,0.1), 0 4px 6px -2px rgba(0,0,0,0.05); cursor:pointer; transition:all 0.3s ease; position:relative; display:flex; align-items:center; justify-content:center;">
+
+                            <!-- State Icon -->
+                            <i id="action-icon" class="fas fa-play" style="margin-left:5px;"></i>
+
+                            <!-- Pulse Ring (for Active State) -->
+                            <div id="action-ring"
+                                style="position:absolute; inset:-5px; border-radius:50%; border:2px solid rgba(118, 75, 162, 0.5); opacity:0; transition:opacity 0.3s;">
+                            </div>
+                        </button>
+
+                        <!-- Dynamic Status Text -->
+                        <div style="margin-top:15px; text-align:center;">
+                            <div id="live-status-text" style="font-size:1.2rem; font-weight:700; color:#2d3748;">Ready
+                            </div>
+                            <div id="live-sub-status" style="font-size:0.9rem; color:#718096;">Tap play to start
+                                briefing</div>
+                        </div>
+                        <div id="debug-status"
+                            style="margin-top:10px; font-size:0.8rem; color:#a0aec0; display:none; text-align:center;">
+                        </div>
+
+                        <div id="mic-status" style="font-size:0.85rem; color:#718096; margin-top:8px; display:none;">
+                            Mic: Off
+                        </div>
+                        <div id="gate-status" style="font-size:0.85rem; color:#718096; margin-top:4px; display:none;">
+                            Barge-in: Off
+                        </div>
+
+                        <!-- Mic Visualizer (Hidden until active) -->
+                        <div id="visualizer-container"
+                            style="width:100%; max-width:300px; height:60px; margin-top:20px; background:rgba(0,0,0,0.05); border-radius:12px; overflow:hidden; display:none;">
+                            <canvas id="mic-visualizer" style="width:100%; height:100%;"></canvas>
+                        </div>
+
+                        <audio id="daily-remote-audio" autoplay playsinline style="display:none;"></audio>
+
+                        <!-- Secondary Exit Button -->
+                        <button id="btn-exit" onclick="stopBriefing()"
+                            style="margin-top:20px; background:transparent; border:1px solid #e53e3e; color:#e53e3e; padding:8px 24px; border-radius:20px; cursor:pointer; font-size:0.9rem; display:none;">
+                            <i class="fas fa-stop mr-2"></i> End Session
+                        </button>
+
+                    </div>
+
+                    <div id="briefing-script"
+                        style="line-height:1.8; color:#2d3748; white-space: pre-wrap; margin-top:20px;">
+                        Fetching the latest briefing for you...
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB: ADMIN -->
+        <div id="admin" class="tab-content">
+            <div class="project-header">
+                <h1>⚙️ Administration</h1>
+            </div>
+            <div class="admin-panel">
+                <!-- Hackathon Model Summary -->
+                <div class="admin-card">
+                    <h3>🤖 Model Compatibility</h3>
+                    <p
+                        style="margin-bottom:15px; font-weight:bold; background: linear-gradient(90deg, #4285f4, #ea4335, #fbbc05, #34a853); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent;">
+                        Powered by Gemini</p>
+                    <table style="width:100%; border-collapse: collapse; font-size: 0.9em;">
+                        <thead>
+                            <tr style="text-align: left; border-bottom: 2px solid #edf2f7;">
+                                <th style="padding: 10px;">Feature</th>
+                                <th style="padding: 10px;">Model</th>
+                                <th style="padding: 10px;">Location</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #edf2f7;">
+                                <td style="padding: 8px;">Smart Feeds (scoring)</td>
+                                <td style="padding: 8px; font-family: monospace;">gemini-2.5-flash</td>
+                                <td style="padding: 8px; color: #718096;">us-central1</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;">
+                                <td style="padding: 8px;">AI Assistant (NL2SQL)</td>
+                                <td style="padding: 8px; font-family: monospace;">gemini-2.5-flash</td>
+                                <td style="padding: 8px; color: #718096;">us-central1</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;">
+                                <td style="padding: 8px;">Video Lectures</td>
+                                <td style="padding: 8px; font-family: monospace;">gemini-2.5-flash</td>
+                                <td style="padding: 8px; color: #718096;">us-central1</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;">
+                                <td style="padding: 8px;">Morning Briefing (script)</td>
+                                <td style="padding: 8px; font-family: monospace;">gemini-2.5-flash</td>
+                                <td style="padding: 8px; color: #718096;">us-central1</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;">
+                                <td style="padding: 8px;">Morning Briefing (audio)</td>
+                                <td style="padding: 8px; font-family: monospace;">
+                                    gemini-live-2.5-flash-native-audio</td>
+                                <td style="padding: 8px; color: #718096;">us-central1</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #edf2f7;">
+                                <td style="padding: 8px;">Code Review (analysis)</td>
+                                <td style="padding: 8px; font-family: monospace;">gemini-2.5-pro</td>
+                                <td style="padding: 8px; color: #718096;">us-central1</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 8px;">Code Review (embeddings)</td>
+                                <td style="padding: 8px; font-family: monospace;">text-embedding-005</td>
+                                <td style="padding: 8px; color: #718096;">us-central1</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- 1. Authentication (Moved to Top) -->
+                <div class="admin-card" id="admin-auth-card"
+                    style="border-left: 5px solid #e53e3e; background: #fff5f5;">
+                    <h3>🔐 Workspace Unlock</h3>
+                    <p style="margin-bottom:15px; color:#c53030; font-size:0.95em;">
+                        Enter your Admin API Key to unlock video processing and release management features.
+                    </p>
+                    <div style="position: relative;">
+                        <input type="password" id="admin-key" placeholder="Enter Admin API Key..."
+                            style="padding:12px; border:2px solid #fc8181; border-radius:8px; width:100%; font-family:monospace; font-size:1.1em; transition: all 0.3s;"
+                            oninput="updateAdminUI()">
+                        <span id="lock-icon"
+                            style="position: absolute; right: 15px; top: 12px; font-size: 1.2em;">🔒</span>
+                    </div>
+                    <div id="auth-status"
+                        style="margin-top:8px; font-size:0.85em; color:#e53e3e; font-weight:600; min-height:20px;">
+                        Locked: Enter key to proceed
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>🎥 Process New Video Lecture</h3>
+                    <p style="color:#666; font-size:0.9em; margin-bottom:15px;">Generate notes and slides from a
+                        YouTube technical talk.</p>
+                    <div style="display:flex; gap:10px;">
+                        <input type="text" id="admin-video-url" placeholder="Paste YouTube URL..."
+                            style="flex:1; padding:10px; border:1px solid #cbd5e0; border-radius:6px;">
+                        <select id="admin-video-mode"
+                            style="padding:10px; border:1px solid #cbd5e0; border-radius:6px; background:white;">
+                            <option value="comprehensive">Master Study Guide (All-in-One)</option>
+                            <option value="transcript">Verbatim Transcript</option>
+                        </select>
+                        <button id="btn-process-video" onclick="adminAction('process-video')" disabled
+                            style="background:#cbd5e0; color:white; border:none; padding:0 20px; border-radius:6px; cursor:not-allowed; display:flex; align-items:center; gap:8px;">
+                            <span>🔒</span> Process
+                        </button>
+                    </div>
+                </div>
+
+                <div class="admin-card">
+                    <h3>🔄 Data Management</h3>
+                    <p style="color:#666; font-size:0.9em; margin-bottom:15px;">Sync feed definitions from OPML
+                        source file.</p>
+                    <div style="display:flex; gap:10px;">
+                        <button id="btn-reload-feeds" onclick="adminAction('reload-feeds')" disabled
+                            style="background:#cbd5e0; color:white; border:none; padding:10px 20px; border-radius:6px; cursor:not-allowed; display:flex; align-items:center; gap:8px;">
+                            <span>🔒</span> Sync Feeds
+                        </button>
+                    </div>
+                    <div id="admin-result" style="margin-top:10px; font-weight:bold;"></div>
+                </div>
+            </div>
+        </div>
+        <!-- TAB: Observability -->
+        <div id="llm-observability" class="tab-content">
+            <div class="project-header">
+                <h1>🔍 Observability</h1>
+                <p>Live telemetry for cost, latency, and system health</p>
+                <div class="tags"><span class="tag tag-rose">RAG Architecture</span><span
+                        class="tag tag-rose">Datadog</span><span class="tag tag-rose">GCP</span><span
+                        class="tag tag-rose">Cloud Run</span><span class="tag tag-rose">Vertex
+                        AI</span><span class="tag tag-rose">LLM Ops</span>
+                </div>
+                <div class="project-links">
+                    <a href="https://medium.com/@random.droid/llm-code-review-service-with-rag-observability-93e6befa6330"
+                        target="_blank" class="secondary"
+                        style="background: transparent; color: #BA8891; border: 1px solid #BA8891;">📝 Blog Post</a>
+                    <a href="https://p.us5.datadoghq.com/sb/6134f236-e075-11f0-bac8-b24f51c75d5d-8eb6a42c48d48e6171c5b72d9037c42c"
+                        target="_blank" class="secondary"
+                        style="background: transparent; color: #BA8891; border: 1px solid #BA8891;">📊 Detailed
+                        Dashboard</a>
+                    <button onclick="initLLMDashboard(); loadBriefingKpis(); loadBriefingTimeseries(); loadScoringKpis(); loadScoringTimeseries();"
+                        class="refresh-btn"
+                        style="background: #BA8891; color: white; border: none; padding: 8px 14px; border-radius: 8px; font-weight: 600;">
+                        Refresh All
+                    </button>
+                </div>
+            </div>
+            <div class="metrics">
+                <div
+                    style="margin-bottom: 18px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid #eee;">
+                    <img src="/static/images/briefing_service_workflow.png" alt="Briefing Service Workflow"
+                        style="width: 100%; display: block;">
+                </div>
+                <div style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
+                    <h2 style="margin:0;">🎙️ Briefing Observability</h2>
+                </div>
+                <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">
+                    Live session metrics from the Pipecat sidecar (TTFA, turn duration, tokens).
+                </p>
+                <div class="kpi-row" id="briefing-kpis">
+                    <div class="kpi-card">
+                        <div class="value" id="brief-ttfb-p50">—</div>
+                        <div class="label"
+                            title="Median time to first byte from the model (proxy for time-to-first-audio).">TTFA (P50)
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value" id="brief-ttfb-p95">—</div>
+                        <div class="label" title="95th percentile time to first byte (worst-case user wait).">TTFA (P95)
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value" id="brief-turn-p50">—</div>
+                        <div class="label" title="Median turn duration (start speaking to stop speaking).">Turn (P50)
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value" id="brief-turn-p95">—</div>
+                        <div class="label" title="95th percentile turn duration (longest bot responses).">Turn (P95)
+                        </div>
+                    </div>
+                </div>
+                <div class="live-dashboard" style="margin-top: 20px;">
+                    <div class="chart-container" title="TTFA and Turn Duration over time (ms).">
+                        <canvas id="briefingTtfaChart"></canvas>
+                    </div>
+                    <div class="chart-container"
+                        title="LLM tokens per response (per turn), reported by Gemini Live (native audio).">
+                        <canvas id="briefingTokensChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SCORING OBSERVABILITY -->
+            <div class="metrics" style="margin-top: 40px;">
+                <h2 style="margin:0;">📊 Scoring Observability</h2>
+                <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">
+                    Airflow DAG metrics from <code>llm_observability.scoring_batch_metrics</code>.
+                </p>
+                <div class="kpi-row" id="scoring-kpis">
+                    <div class="kpi-card">
+                        <div class="value" id="scoring-runs">—</div>
+                        <div class="label">DAG Runs (7d)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value" id="scoring-new">—</div>
+                        <div class="label">New Articles</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value" id="scoring-stored">—</div>
+                        <div class="label">Stored</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value" id="scoring-avg-score">—</div>
+                        <div class="label">Avg Score</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value" id="scoring-low-rate">—</div>
+                        <div class="label">Low Score Rate</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value" id="scoring-community">—</div>
+                        <div class="label">Community Coverage</div>
+                    </div>
+                </div>
+                <div class="live-dashboard" style="margin-top: 20px;">
+                    <div class="chart-container" title="Articles scored per DAG run">
+                        <canvas id="scoringArticlesChart"></canvas>
+                    </div>
+                    <div class="chart-container" title="Average score per DAG run">
+                        <canvas id="scoringScoreChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <div style="margin-top: 16px; font-size: 0.9em; color: #666;">
+                See the Smart Feeds Architecture in the ✨ Smart Feeds tab.
+            </div>
+
+            <div class="metrics" style="margin-top: 40px;">
+                <h2 style="margin:0;">🔴 Code Review Observability</h2>
+                <p style="margin-bottom: 20px; color: #666; font-size: 0.9em;">
+                    <strong>Source:</strong> Live telemetry from
+                    <code>llm_observability.metrics</code>
+                    in BigQuery.
+                </p>
+                <div
+                    style="margin: 16px 0 24px; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 20px rgba(0,0,0,0.1); border: 1px solid #eee;">
+                    <img src="/static/images/llm_observability_banner.png" alt="LLM Observability Architecture"
+                        style="width: 100%; display: block;">
+                </div>
+
+                <!-- GITHUB ACTIVITY WIDGET -->
+                <div class="info-section" style="margin-bottom: 25px; border-left: 3px solid #333;">
+                    <h3 style="display: flex; align-items: center; gap: 10px; margin-bottom: 15px;">
+                        <svg height="24" width="24" viewBox="0 0 16 16" fill="currentColor">
+                            <path
+                                d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z">
+                            </path>
+                        </svg>
+                        Recent Repo Activity
+                    </h3>
+                    <div id="github-activity-feed">
+                        <p style="color: #666; font-style: italic;">Fetching latest commits...</p>
+                    </div>
+                </div>
+
+                <script>
+                    async function fetchGitHubActivity() {
+                        const username = 'random-droid';
+                        const container = document.getElementById('github-activity-feed');
+                        try {
+                            const res = await fetch(`https://api.github.com/users/${username}/events`);
+                            if (!res.ok) throw new Error('GitHub API limit');
+                            const events = await res.json();
+                            const pushes = events.filter(e => e.type === 'PushEvent').slice(0, 5);
+
+                            if (pushes.length === 0) {
+                                container.innerHTML = '<p>No recent public commits found.</p>';
+                                return;
+                            }
+
+                            container.innerHTML = `<ul style="list-style: none; padding: 0;">` +
+                                pushes.map(event => {
+                                    const repo = event.repo.name;
+                                    const msg = event.payload?.commits?.[0]?.message || 'Update';
+                                    const date = new Date(event.created_at).toLocaleDateString();
+                                    return `
+                                    <li style="margin-bottom: 10px; padding-bottom: 10px; border-bottom: 1px solid #eee;">
+                                        <div style="font-weight: bold; font-size: 0.9em; color: #24292e;">
+                                            <a href="https://github.com/${repo}" target="_blank" style="text-decoration: none; color: inherit;">${repo}</a>
+                                        </div>
+                                        <div style="font-size: 0.85em; color: #586069; margin-top: 2px;">
+                                            ${msg} <span style="float: right; color: #aaa;">${date}</span>
+                                        </div>
+                                    </li>`;
+                                }).join('') +
+                                `</ul>`;
+                        } catch (e) {
+                            container.innerHTML = `<p style="color: #666; font-size: 0.8em;">Unable to load activity (${e.message}). <a href="https://github.com/${username}" target="_blank">View on GitHub</a></p>`;
+                        }
+                    }
+                    // Load immediately
+                    fetchGitHubActivity();
+                </script>
+                <div class="kpi-row" id="llm-kpis">
+                    <div class="kpi-card">
+                        <div class="value">...</div>
+                        <div class="label" title="Total PR review runs recorded in BigQuery for the selected window.">
+                            Total Reviews</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value">...</div>
+                        <div class="label" title="Total LLM cost for PR reviews over the selected window.">Total Cost
+                        </div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value">...</div>
+                        <div class="label" title="Average end‑to‑end latency per PR review request.">Avg Latency</div>
+                    </div>
+                </div>
+                <div class="live-dashboard">
+                    <div class="chart-container" title="Daily total cost for PR reviews (USD)."><canvas
+                            id="costChart"></canvas></div>
+                    <div class="chart-container" title="Daily average latency for PR reviews (seconds)."><canvas
+                            id="latencyChart"></canvas></div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <script>
+
+
+        // --- Morning Briefing Logic (Interactive)
+        let dailyCall = null;
+        let micStatusText = null;
+        let gateStatusText = null;
+        let bargeInEnabled = null;
+        let dailyAudioEl = null;
+        let sessionState = 'IDLE'; // <--- FIXED: Global state declaration
+        // client_ready messaging removed; backend controls start timing.
+        let lastDebugStatusTs = 0;
+        let inboundRtpMonitorId = null;
+        let lastInboundBytes = 0;
+        let lastInboundPackets = 0;
+        let lastInboundJitter = null;
+        let lastTransportState = null;
+        let lastCandidatePairState = null;
+        let lastInboundStatus = '';
+        let isStoppingBriefing = false;
+        let statsPrevInboundBytes = null;
+        let statsPrevInboundTs = null;
+        const FE_VERBOSE_DEBUG = window.localStorage.getItem('briefing_debug') === '1';
+        let cloudRunLoadingTimer = null;
+        let briefingStartTimer = null;
+        let speakingPendingSince = null;
+        let speakingPendingTimer = null;
+
+        function debugLog(...args) {
+            if (FE_VERBOSE_DEBUG) console.log(...args);
+        }
+
+        function setDebugStatus(message, isError = false) {
+            const el = document.getElementById('debug-status');
+            if (!el) return;
+            const now = Date.now();
+            // Avoid flooding the UI with rapid updates
+            if (now - lastDebugStatusTs < 250 && message !== 'Idle') return;
+            lastDebugStatusTs = now;
+            el.style.display = message ? 'block' : 'none';
+            el.style.color = isError ? '#e53e3e' : '#a0aec0';
+            el.textContent = message;
+        }
+
+        // Multi-tab guard: Auto-takeover (like Spotify - new tab stops others)
+        const briefingChannel = new BroadcastChannel('briefing_session');
+
+        briefingChannel.onmessage = (event) => {
+            if (event.data === 'takeover' && dailyCall) {
+                console.log('Briefing taken over by another tab');
+                stopBriefing(); // Gracefully stop this tab's session
+            }
+        };
+
+        // Microphone capture for interactive mode
+        let micContext = null;
+        let visualizerId = null;
+        let localAudioObserverStarted = false;
+        let remoteAudioObserverStarted = false;
+        let localBargeMuted = false;
+        let lastLocalSpeechTs = 0;
+        let remoteAudioDiagTimer = null;
+        let remoteAudioCtx = null;
+        let remoteTrackEndedHandler = null;
+        let lastRemoteAudioLogTs = 0;
+        let dailyObservabilityTimer = null;
+        let briefingObservabilityTimer = null;
+        let briefingTtfaChart = null;
+        let briefingTokensChart = null;
+        let lastAudioLevelLogTs = 0;
+
+        function ensureDailyAudioEl() {
+            if (!dailyAudioEl) {
+                dailyAudioEl = document.getElementById('daily-remote-audio');
+            }
+            if (!dailyAudioEl) {
+                dailyAudioEl = document.createElement('audio');
+                dailyAudioEl.id = 'daily-remote-audio';
+                dailyAudioEl.autoplay = true;
+                dailyAudioEl.playsInline = true;
+                dailyAudioEl.style.display = 'none';
+                document.body.appendChild(dailyAudioEl);
+            }
+            return dailyAudioEl;
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            ensureDailyAudioEl();
+        });
+
+        function stopDailyObservability() {
+            if (dailyObservabilityTimer) {
+                clearInterval(dailyObservabilityTimer);
+                dailyObservabilityTimer = null;
+            }
+        }
+
+        function stopBriefingObservability() {
+            if (briefingObservabilityTimer) {
+                clearInterval(briefingObservabilityTimer);
+                briefingObservabilityTimer = null;
+            }
+        }
+
+        function formatMs(value) {
+            if (value === null || value === undefined) return '—';
+            return `${Math.round(value)} ms`;
+        }
+
+        function formatInt(value) {
+            if (value === null || value === undefined) return '—';
+            return value.toLocaleString();
+        }
+
+        function setBriefingKpi(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value;
+        }
+
+        function ensureBriefingCharts() {
+            const ttfaEl = document.getElementById('briefingTtfaChart');
+            const tokensEl = document.getElementById('briefingTokensChart');
+            if (!ttfaEl || !tokensEl || typeof Chart === 'undefined') return;
+
+            if (!briefingTtfaChart) {
+                briefingTtfaChart = new Chart(ttfaEl.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'TTFA (ms)',
+                            data: [],
+                            borderColor: '#BA8891',
+                            backgroundColor: 'rgba(186,136,145,0.15)',
+                            tension: 0.3,
+                            pointRadius: 2,
+                            fill: true,
+                        }, {
+                            label: 'Turn Duration (ms)',
+                            data: [],
+                            borderColor: '#6B46C1',
+                            backgroundColor: 'rgba(107,70,193,0.15)',
+                            tension: 0.3,
+                            pointRadius: 2,
+                            fill: true,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { title: { display: true, text: 'ms' } },
+                            x: { title: { display: true, text: 'Time' } }
+                        }
+                    }
+                });
+            }
+
+            if (!briefingTokensChart) {
+                briefingTokensChart = new Chart(tokensEl.getContext('2d'), {
+                    type: 'line',
+                    data: {
+                        labels: [],
+                        datasets: [{
+                            label: 'LLM Tokens / Turn (Gemini Live)',
+                            data: [],
+                            borderColor: '#4A5568',
+                            backgroundColor: 'rgba(74,85,104,0.15)',
+                            tension: 0.3,
+                            pointRadius: 2,
+                            fill: true,
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        scales: {
+                            y: { title: { display: true, text: 'tokens' } },
+                            x: { title: { display: true, text: 'Time' } }
+                        }
+                    }
+                });
+            }
+        }
+
+        function updateBriefingCharts(series) {
+            ensureBriefingCharts();
+            if (!briefingTtfaChart || !briefingTokensChart) return;
+            const labels = series.map(s => s.ts ? new Date(s.ts * 1000).toLocaleTimeString() : '');
+            const ttfb = series.map(s => (s.ttfb_ms ?? null));
+            const turnDuration = series.map(s => (s.turn_e2e_ms ?? null));
+            const tokens = series.map(s => (s.llm_total_tokens ?? null));
+
+            briefingTtfaChart.data.labels = labels;
+            briefingTtfaChart.data.datasets[0].data = ttfb;
+            briefingTtfaChart.data.datasets[1].data = turnDuration;
+            briefingTtfaChart.update();
+
+            briefingTokensChart.data.labels = labels;
+            briefingTokensChart.data.datasets[0].data = tokens;
+            briefingTokensChart.update();
+        }
+
+        async function loadBriefingKpis() {
+            try {
+                const res = await fetch('/api/briefing/observability/kpis?days=7');
+                if (!res.ok) throw new Error('briefing kpis failed');
+                const data = await res.json();
+                if (!data?.ok) {
+                    setBriefingKpi('brief-ttfb-p50', '—');
+                    setBriefingKpi('brief-ttfb-p95', '—');
+                    setBriefingKpi('brief-turn-p50', '—');
+                    setBriefingKpi('brief-turn-p95', '—');
+                    return;
+                }
+                setBriefingKpi('brief-ttfb-p50', formatMs(data.ttfb_p50_ms));
+                setBriefingKpi('brief-ttfb-p95', formatMs(data.ttfb_p95_ms));
+                setBriefingKpi('brief-turn-p50', formatMs(data.turn_e2e_p50_ms));
+                setBriefingKpi('brief-turn-p95', formatMs(data.turn_e2e_p95_ms));
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        async function loadBriefingTimeseries() {
+            try {
+                const res = await fetch('/api/briefing/observability/timeseries?days=7&limit=120');
+                if (!res.ok) throw new Error('briefing timeseries failed');
+                const data = await res.json();
+                if (!data?.ok || !Array.isArray(data.series)) return;
+                updateBriefingCharts(data.series);
+            } catch (e) {
+                // Silent fail
+            }
+        }
+
+        function startBriefingObservability() {
+            if (briefingObservabilityTimer) return;
+            ensureBriefingCharts();
+            loadBriefingKpis();
+            loadBriefingTimeseries();
+        }
+
+        // =====================================================================
+        // SCORING OBSERVABILITY
+        // =====================================================================
+        let scoringArticlesChart = null;
+        let scoringScoreChart = null;
+
+        function ensureScoringCharts() {
+            if (!scoringArticlesChart) {
+                const ctx1 = document.getElementById('scoringArticlesChart')?.getContext('2d');
+                if (ctx1) {
+                    scoringArticlesChart = new Chart(ctx1, {
+                        type: 'bar',
+                        data: {
+                            labels: [],
+                            datasets: [{
+                                label: 'New Articles',
+                                data: [],
+                                backgroundColor: 'rgba(186, 136, 145, 0.6)',
+                                borderColor: '#BA8891',
+                                borderWidth: 1
+                            }, {
+                                label: 'Stored',
+                                data: [],
+                                backgroundColor: 'rgba(107, 70, 193, 0.6)',
+                                borderColor: '#6B46C1',
+                                borderWidth: 1
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { position: 'top' } },
+                            scales: { y: { beginAtZero: true } }
+                        }
+                    });
+                }
+            }
+            if (!scoringScoreChart) {
+                const ctx2 = document.getElementById('scoringScoreChart')?.getContext('2d');
+                if (ctx2) {
+                    scoringScoreChart = new Chart(ctx2, {
+                        type: 'line',
+                        data: {
+                            labels: [],
+                            datasets: [{
+                                label: 'Avg Score',
+                                data: [],
+                                borderColor: '#BA8891',
+                                backgroundColor: 'rgba(186, 136, 145, 0.1)',
+                                fill: true,
+                                tension: 0.3
+                            }, {
+                                label: 'P50 Score',
+                                data: [],
+                                borderColor: '#6B46C1',
+                                borderDash: [5, 5],
+                                fill: false,
+                                tension: 0.3
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            maintainAspectRatio: false,
+                            plugins: { legend: { position: 'top' } },
+                            scales: { y: { beginAtZero: true, max: 100 } }
+                        }
+                    });
+                }
+            }
+        }
+
+        function setScoringKpi(id, value) {
+            const el = document.getElementById(id);
+            if (el) el.textContent = value ?? '—';
+        }
+
+        async function loadScoringKpis() {
+            try {
+                const res = await fetch('/api/observability/scoring/kpis?days=7');
+                if (!res.ok) throw new Error('scoring kpis failed');
+                const data = await res.json();
+                if (!data?.ok) return;
+                setScoringKpi('scoring-runs', data.total_runs);
+                setScoringKpi('scoring-new', data.total_new);
+                setScoringKpi('scoring-stored', data.total_stored);
+                setScoringKpi('scoring-avg-score', data.avg_final_score?.toFixed(1));
+                setScoringKpi('scoring-low-rate', data.avg_low_score_rate ? (data.avg_low_score_rate * 100).toFixed(1) + '%' : '—');
+                setScoringKpi('scoring-community', data.avg_community_coverage ? (data.avg_community_coverage * 100).toFixed(0) + '%' : '—');
+            } catch (e) {
+                // ignore
+            }
+        }
+
+        async function loadScoringTimeseries() {
+            try {
+                ensureScoringCharts();
+                const res = await fetch('/api/observability/scoring/timeseries?days=7&limit=30');
+                if (!res.ok) throw new Error('scoring timeseries failed');
+                const data = await res.json();
+                if (!data?.ok || !Array.isArray(data.series)) return;
+
+                const labels = data.series.map(d => {
+                    if (!d.ts) return '';
+                    return new Date(d.ts * 1000).toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+                });
+
+                if (scoringArticlesChart) {
+                    scoringArticlesChart.data.labels = labels;
+                    scoringArticlesChart.data.datasets[0].data = data.series.map(d => d.new_count || 0);
+                    scoringArticlesChart.data.datasets[1].data = data.series.map(d => d.stored_count || 0);
+                    scoringArticlesChart.update();
+                }
+
+                if (scoringScoreChart) {
+                    scoringScoreChart.data.labels = labels;
+                    scoringScoreChart.data.datasets[0].data = data.series.map(d => d.final_score_mean || 0);
+                    scoringScoreChart.data.datasets[1].data = data.series.map(d => d.final_score_p50 || 0);
+                    scoringScoreChart.update();
+                }
+            } catch (e) {
+                // Silent fail
+            }
+        }
+
+        // Load scoring observability on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            setTimeout(() => {
+                loadScoringKpis();
+                loadScoringTimeseries();
+            }, 500);
+        });
+
+        function startDailyObservability() {
+            if (dailyObservabilityTimer) return;
+            if (!remoteAudioObserverStarted && dailyCall?.startRemoteParticipantsAudioLevelObserver) {
+                remoteAudioObserverStarted = true;
+                Promise.resolve(dailyCall.startRemoteParticipantsAudioLevelObserver(100)).catch((e) => {
+                    remoteAudioObserverStarted = false;
+                    console.warn("DailyStats: startRemoteParticipantsAudioLevelObserver failed", e);
+                });
+            }
+
+            if (dailyCall?.getNetworkStats) {
+                dailyObservabilityTimer = setInterval(async () => {
+                    try {
+                        const stats = await dailyCall.getNetworkStats();
+                        const latest = stats?.stats?.latest;
+                        if (latest || dailyCall?.getStats) {
+                            let downKbps = latest?.downloadBitsPerSecond
+                                ? (latest.downloadBitsPerSecond / 1000)
+                                : 0;
+                            // Fallback: derive download bitrate from WebRTC inbound audio bytes.
+                            if (downKbps <= 0 && dailyCall?.getStats) {
+                                try {
+                                    const reports = await dailyCall.getStats();
+                                    let inboundAudio = null;
+                                    for (const report of reports.values()) {
+                                        if (report.type === 'inbound-rtp' && report.kind === 'audio') {
+                                            inboundAudio = report;
+                                            break;
+                                        }
+                                    }
+                                    if (inboundAudio) {
+                                        const bytes = inboundAudio.bytesReceived || 0;
+                                        const now = performance.now();
+                                        if (statsPrevInboundBytes !== null && statsPrevInboundTs !== null && now > statsPrevInboundTs) {
+                                            const deltaBytes = Math.max(0, bytes - statsPrevInboundBytes);
+                                            const deltaSec = (now - statsPrevInboundTs) / 1000;
+                                            downKbps = (deltaBytes * 8) / deltaSec / 1000;
+                                        }
+                                        statsPrevInboundBytes = bytes;
+                                        statsPrevInboundTs = now;
+                                    }
+                                } catch (e) {
+                                    debugLog("DailyStats: getStats fallback failed", e);
+                                }
+                            }
+                            const packetLoss = latest?.videoPacketLoss ?? latest?.audioPacketLoss;
+                            const noisyNoSignal = downKbps <= 0 && (packetLoss === undefined || packetLoss === null);
+                            if (FE_VERBOSE_DEBUG || !noisyNoSignal) {
+                                debugLog("DailyStats: download kbps", downKbps);
+                                debugLog("DailyStats: packet loss", packetLoss ?? "n/a");
+                            }
+                        }
+                    } catch (e) {
+                        console.warn("DailyStats: getNetworkStats failed", e);
+                    }
+                }, 2000);
+            }
+        }
+
+        function stopRemoteAudioDiagnostics() {
+            if (remoteTrackEndedHandler && dailyAudioEl?.srcObject) {
+                const tracks = dailyAudioEl.srcObject.getAudioTracks?.() || [];
+                tracks.forEach(t => t.removeEventListener?.('ended', remoteTrackEndedHandler));
+            }
+            remoteTrackEndedHandler = null;
+            if (remoteAudioDiagTimer) {
+                clearInterval(remoteAudioDiagTimer);
+                remoteAudioDiagTimer = null;
+            }
+            if (remoteAudioCtx) {
+                remoteAudioCtx.close().catch(() => { });
+                remoteAudioCtx = null;
+            }
+        }
+
+        function startRemoteAudioDiagnostics(track) {
+            stopRemoteAudioDiagnostics();
+            if (!track) return;
+            const stream = new MediaStream([track]);
+            try {
+                const AudioCtx = window.AudioContext || window.webkitAudioContext;
+                remoteAudioCtx = new AudioCtx();
+                const src = remoteAudioCtx.createMediaStreamSource(stream);
+                const analyser = remoteAudioCtx.createAnalyser();
+                analyser.fftSize = 2048;
+                const buf = new Uint8Array(analyser.fftSize);
+                src.connect(analyser);
+
+                remoteAudioDiagTimer = setInterval(() => {
+                    const audioEl = ensureDailyAudioEl();
+                    const tracks = audioEl?.srcObject?.getAudioTracks?.() || [];
+                    const t = tracks[0];
+                    analyser.getByteTimeDomainData(buf);
+                    let sum = 0;
+                    for (let i = 0; i < buf.length; i++) {
+                        const v = (buf[i] - 128) / 128;
+                        sum += v * v;
+                    }
+                    const rms = Math.sqrt(sum / buf.length);
+                    const now = performance.now();
+                    if (now - lastRemoteAudioLogTs >= 4000) {
+                        lastRemoteAudioLogTs = now;
+                        debugLog("AudioHealth:", {
+                            paused: audioEl?.paused,
+                            muted: audioEl?.muted,
+                            volume: audioEl?.volume,
+                            readyState: audioEl?.readyState,
+                            trackState: t?.readyState,
+                            trackMuted: t?.muted,
+                            rms: Number(rms.toFixed(4))
+                        });
+                    }
+                }, 1000);
+            } catch (e) {
+                console.warn("AudioHealth: failed to init analyser", e);
+            }
+
+            remoteTrackEndedHandler = () => {
+                console.warn("AudioHealth: remote audio track ended");
+                stopRemoteAudioDiagnostics();
+            };
+            track.addEventListener?.('ended', remoteTrackEndedHandler);
+        }
+
+        function sendDailyAppMessage(payload, label) {
+            if (!dailyCall || !dailyCall.sendAppMessage) {
+                console.warn("Daily app-message skipped", label || "", payload);
+                return;
+            }
+            console.log("Daily app-message -> server", label || "", payload);
+            dailyCall.sendAppMessage(payload);
+        }
+
+        function attachRemoteAudioFromParticipants() {
+            if (!dailyCall) return;
+            const participants = dailyCall.participants();
+            for (const id in participants) {
+                const p = participants[id];
+                if (!p || p.local) continue;
+                const track = p.tracks && p.tracks.audio && p.tracks.audio.track;
+                if (track) {
+                    console.log("RTC: attaching remote audio from participants()");
+                    const stream = new MediaStream([track]);
+                    dailyAudioEl = ensureDailyAudioEl();
+                    dailyAudioEl.muted = false;
+                    dailyAudioEl.srcObject = stream;
+                    dailyAudioEl.play().catch((e) => console.warn("Audio play blocked:", e));
+                    return;
+                }
+            }
+        }
+
+        function startInboundRtpMonitor() {
+            if (inboundRtpMonitorId || !dailyCall || !dailyCall.getStats) return;
+            inboundRtpMonitorId = setInterval(async () => {
+                try {
+                    const stats = await dailyCall.getStats();
+                    let inboundAudio = null;
+                    let transport = null;
+                    let candidatePair = null;
+                    stats.forEach(report => {
+                        if (report.type === 'inbound-rtp' && report.kind === 'audio') {
+                            inboundAudio = report;
+                        } else if (report.type === 'transport') {
+                            transport = report;
+                        } else if (report.type === 'candidate-pair' && report.state) {
+                            candidatePair = report;
+                        }
+                    });
+                    if (transport) {
+                        const state = `${transport.iceState || 'unknown'}|${transport.dtlsState || 'unknown'}`;
+                        if (state !== lastTransportState) {
+                            console.log(`RTC: transport state ${state}`);
+                            lastTransportState = state;
+                        }
+                    }
+                    if (candidatePair && candidatePair.state !== lastCandidatePairState) {
+                        console.log(`RTC: candidate-pair state ${candidatePair.state}`);
+                        lastCandidatePairState = candidatePair.state;
+                    }
+                    if (!inboundAudio) {
+                        const status = "Inbound audio: none";
+                        if (lastInboundStatus !== status) {
+                            console.log("RTC: no inbound-rtp audio yet");
+                            lastInboundStatus = status;
+                        }
+                        console.log("RTC: inbound audio totals bytes=0 packets=0");
+                        const debugEl = document.getElementById('debug-status');
+                        if (debugEl && (!debugEl.textContent || debugEl.textContent.startsWith('Inbound audio'))) {
+                            debugEl.style.display = 'block';
+                            debugEl.style.color = '#a0aec0';
+                            debugEl.textContent = status;
+                        }
+                        return;
+                    }
+                    const bytes = inboundAudio.bytesReceived || 0;
+                    const packets = inboundAudio.packetsReceived || 0;
+                    const jitter = typeof inboundAudio.jitter === 'number' ? inboundAudio.jitter : null;
+                    console.log(`RTC: inbound audio totals bytes=${bytes} packets=${packets}`);
+                    if (bytes > lastInboundBytes || packets > lastInboundPackets) {
+                        console.log(`RTC: inbound audio flowing (+${bytes - lastInboundBytes} bytes, +${packets - lastInboundPackets} packets)`);
+                        if (jitter !== null && jitter !== lastInboundJitter) {
+                            console.log(`RTC: inbound jitter ${jitter.toFixed(3)}s`);
+                            lastInboundJitter = jitter;
+                        }
+                    }
+                    lastInboundBytes = bytes;
+                    lastInboundPackets = packets;
+                    const status = bytes > 0 ? "Inbound audio: OK" : "Inbound audio: stalled";
+                    if (status !== lastInboundStatus) {
+                        lastInboundStatus = status;
+                    }
+                    const debugEl = document.getElementById('debug-status');
+                    if (debugEl && (!debugEl.textContent || debugEl.textContent.startsWith('Inbound audio'))) {
+                        debugEl.style.display = 'block';
+                        debugEl.style.color = '#a0aec0';
+                        debugEl.textContent = status;
+                    }
+                } catch (e) {
+                    console.warn("RTC: getStats failed", e);
+                }
+            }, 1000);
+        }
+
+        function stopInboundRtpMonitor() {
+            if (inboundRtpMonitorId) clearInterval(inboundRtpMonitorId);
+            inboundRtpMonitorId = null;
+            lastInboundBytes = 0;
+            lastInboundPackets = 0;
+            lastInboundJitter = null;
+            lastTransportState = null;
+            lastCandidatePairState = null;
+            lastInboundStatus = '';
+        }
+
+        async function loadBriefingScript() {
+            const scriptContainer = document.getElementById('briefing-script');
+            const dateBadge = document.getElementById('briefing-date');
+            const btn = document.getElementById('btn-main-action');
+            const statusMain = document.getElementById('live-status-text');
+            const statusSub = document.getElementById('live-sub-status');
+
+            function renderBriefingScript(text) {
+                if (window.marked && typeof window.marked.parse === 'function') {
+                    scriptContainer.innerHTML = window.marked.parse(text, {
+                        mangle: false,
+                        headerIds: false,
+                    });
+                } else {
+                    scriptContainer.textContent = text;
+                }
+            }
+
+            // Set Loading State
+            scriptContainer.textContent = "Generating your personalized briefing... (This takes a few seconds)";
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+            btn.style.cursor = 'not-allowed';
+            statusMain.innerText = 'Syncing Briefing...';
+            statusSub.innerText = 'Setting the stage...';
+
+            try {
+                const res = await fetch('/api/briefing/today');
+                const data = await res.json();
+                renderBriefingScript(data.script || "");
+                const userDate = data.datetime_utc
+                    ? new Date(data.datetime_utc).toLocaleDateString()
+                    : data.date;
+                const vacationLabel = data.vacation_mode ? " • Off-Duty" : "";
+                const fallbackLabel = data.fallback ? " • fallback" : "";
+                dateBadge.textContent = `${userDate}${vacationLabel}${fallbackLabel}`;
+                prefetchedBriefingScript = data.script;
+
+                if (data.vacation_mode) {
+                    renderBriefingScript("Off-Duty mode enabled. Briefing is paused.");
+                    btn.disabled = true;
+                    btn.style.opacity = '0.6';
+                    btn.style.cursor = 'not-allowed';
+                    statusMain.innerText = 'Off-Duty';
+                    statusSub.innerText = 'Briefing disabled';
+                    return;
+                }
+
+                // Enable Button on Success
+                btn.disabled = false;
+                btn.style.opacity = '1';
+                btn.style.cursor = 'pointer';
+                updateUIState('IDLE'); // Reset text to "Ready"
+
+            } catch (e) {
+                scriptContainer.textContent = "Failed to load briefing script. Please refresh.";
+                statusMain.innerText = 'Error';
+                statusSub.innerText = 'Briefing Unavailable';
+                console.error(e);
+            }
+        }
+
+        async function handleMainAction() {
+            const btn = document.getElementById('btn-main-action');
+            console.log("Main Action Clicked. Current State:", sessionState);
+
+            switch (sessionState) {
+                case 'IDLE':
+                    updateUIState('CONNECTING');
+                    await startBriefing();
+                    break;
+
+                case 'ACTIVE':
+                    // User wants to barge-in or nudge
+                    console.log("Triggering explicit resume/nudge from ACTIVE state");
+                    // In "No-Button" mode, this might just force a listening check or be a manual override
+                    break;
+
+                case 'PAUSED':
+                    // Pipecat/Daily: no explicit resume; just return to active UI
+                    if (dailyCall) {
+                        updateUIState('ACTIVE');
+                        break;
+                    }
+                    break;
+
+                case 'CONNECTING':
+                    console.log("Ignored click while Connecting...");
+                    break;
+            }
+        }
+
+        async function startBriefing() {
+            // CRITICAL FIX: Prevent Double-Click Race Condition
+            if (window.isBriefingConnecting) {
+                console.warn("startBriefing: already connecting, aborting.");
+                return;
+            }
+            console.log("startBriefing: begin");
+            setDebugStatus('Starting...');
+
+            // Safety check: secure context + mic API availability
+            if (!window.isSecureContext || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+                const errorMsg = "Mic API unavailable. Use HTTPS or localhost and allow microphone access.";
+                console.error(errorMsg);
+                alert(errorMsg);
+                updateUIState('IDLE');
+                setDebugStatus(errorMsg, true);
+                return;
+            }
+
+            if (dailyCall) {
+                await stopBriefing({ clearBackendCache: false });
+            }
+            // Prime audio element synchronously on user gesture (autoplay unlock)
+            dailyAudioEl = ensureDailyAudioEl();
+            dailyAudioEl.play().catch((e) => {
+                console.warn("Audio priming blocked:", e);
+            });
+
+            window.isBriefingConnecting = true;
+            updateUIState('CONNECTING');
+            // no-op
+            setDebugStatus('Creating call object...');
+
+            // Takeover: Stop any briefing in other tabs (like Spotify)
+            briefingChannel.postMessage('takeover');
+
+            // [FIX] Reset Sequence ID for new session
+            window.lastAudioSeq = null;
+            statsPrevInboundBytes = null;
+            statsPrevInboundTs = null;
+
+            try {
+                if (!micStatusText) micStatusText = document.getElementById('mic-status');
+                // Create call object immediately on user gesture
+                console.log("startBriefing: creating Daily call object");
+                dailyCall = DailyIframe.createCallObject();
+                window.dailyCall = dailyCall;
+                window.call = dailyCall;
+
+                console.log("startBriefing: POST /api/briefing/start");
+                setDebugStatus('Requesting room...');
+                updateUIState('CONNECTING');
+                if (cloudRunLoadingTimer) clearTimeout(cloudRunLoadingTimer);
+                cloudRunLoadingTimer = setTimeout(() => {
+                    setDebugStatus('Cloud Run is waking up, please be patient...', false);
+                }, 6000);
+                const res = await fetch('/api/briefing/start', { method: 'POST' });
+                console.log("startBriefing: /api/briefing/start response", res.status);
+                if (cloudRunLoadingTimer) {
+                    clearTimeout(cloudRunLoadingTimer);
+                    cloudRunLoadingTimer = null;
+                }
+                if (!res.ok) {
+                    const text = await res.text().catch(() => '');
+                    const msg = `Briefing start failed: ${res.status} ${text}`.trim();
+                    setDebugStatus(msg, true);
+                    throw new Error(msg);
+                }
+                const data = await res.json();
+                console.log("startBriefing: received room data", data);
+                setDebugStatus('Joining room...');
+
+                // If bot is hosted on a VM, start it explicitly before joining
+                if (data.bot_started) {
+                    console.log("startBriefing: bot started by server");
+                } else if (data.bot_start_url && data.bot_token) {
+                    try {
+                        const botStartUrl = String(data.bot_start_url).replace(/\/+$/, '');
+                        console.log("startBriefing: starting bot via", botStartUrl);
+                        await fetch(`${botStartUrl}/start`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify({ room_url: data.room_url, token: data.bot_token, script: data.script || null })
+                        });
+                        console.log("startBriefing: bot start requested");
+                    } catch (err) {
+                        console.warn("startBriefing: bot start failed (continuing)", err);
+                    }
+                }
+
+                // Join Daily room (audio only)
+                dailyCall.on('joined-meeting', () => {
+                    console.log("Daily: joined meeting");
+                    window.isBriefingConnecting = false;
+                    updateUIState('ACTIVE');
+                    if (briefingStartTimer) clearTimeout(briefingStartTimer);
+                    briefingStartTimer = setTimeout(() => {
+                        if (sessionState === 'ACTIVE') {
+                            setDebugStatus('Starting briefing...', false);
+                            const statusMain = document.getElementById('live-status-text');
+                            const statusSub = document.getElementById('live-sub-status');
+                            if (statusMain && statusSub) {
+                                statusMain.innerText = 'Starting briefing...';
+                                statusSub.innerText = 'Connecting to Gemini...';
+                            }
+                        }
+                    }, 2000);
+                    setDebugStatus('Joined room');
+                    if (micStatusText) {
+                        micStatusText.textContent = 'Mic: Connected';
+                        micStatusText.style.display = 'block';
+                    }
+                    startInboundRtpMonitor();
+                    setTimeout(attachRemoteAudioFromParticipants, 500);
+                    startDailyObservability();
+                });
+                dailyCall.on('left-meeting', () => {
+                    console.log("Daily: left meeting");
+                    setDebugStatus('Left room', true);
+                    stopBriefing();
+                });
+                dailyCall.on('error', (e) => {
+                    console.error("Daily error:", e);
+                    setDebugStatus(`Daily error: ${e?.errorMsg || e?.message || 'unknown'}`, true);
+                    stopBriefing();
+                });
+                dailyCall.on('track-started', (evt) => {
+                    if (evt.track && evt.track.kind === 'audio' && evt.participant && !evt.participant.local) {
+                        console.log("💎 Gemini Voice Track Active", {
+                            id: evt.participant?.user_id || evt.participant?.session_id || 'unknown',
+                            name: evt.participant?.user_name || 'unknown',
+                            trackId: evt.track?.id || 'unknown'
+                        });
+                        if (briefingStartTimer) {
+                            clearTimeout(briefingStartTimer);
+                            briefingStartTimer = null;
+                        }
+                        if (speakingPendingTimer) {
+                            clearInterval(speakingPendingTimer);
+                            speakingPendingTimer = null;
+                        }
+                        speakingPendingSince = null;
+                        updateUIState('SPEAKING_PENDING');
+                        setDebugStatus('Preparing audio...');
+                        const stream = new MediaStream([evt.track]);
+                        dailyAudioEl.muted = false;
+                        dailyAudioEl.srcObject = stream;
+                        const onPlaying = () => {
+                            updateUIState('SPEAKING');
+                            setDebugStatus('Briefing in progress');
+                        };
+                        dailyAudioEl.addEventListener('playing', onPlaying, { once: true });
+                        dailyAudioEl.play().catch((e) => {
+                            console.warn("Audio play blocked:", e);
+                            const statusSub = document.getElementById('live-sub-status');
+                            if (statusSub) statusSub.innerText = 'Tap to enable audio';
+                        });
+                        startRemoteAudioDiagnostics(evt.track);
+                    }
+                    if (evt.track && evt.track.kind === 'audio' && evt.participant && evt.participant.local) {
+                        startVisualizer(evt.track);
+                    }
+                });
+                dailyCall.on('app-message', (evt) => {
+                    if (!evt || !evt.data) return;
+                    if (evt.data.type === 'bot-speaking') {
+                        // Simplified: just update state, no timer
+                        updateUIState(evt.data.value ? 'SPEAKING' : 'ACTIVE');
+                        return;
+                    }
+                    if (evt.data.type === 'gate-status') {
+                        if (!gateStatusText) gateStatusText = document.getElementById('gate-status');
+                        if (gateStatusText) {
+                            gateStatusText.textContent = evt.data.allow_interruptions ? 'Barge-in: On' : 'Barge-in: Off';
+                            gateStatusText.style.display = 'block';
+                        }
+                        bargeInEnabled = !!evt.data.allow_interruptions;
+                        if (!bargeInEnabled) {
+                            localBargeMuted = false;
+                            if (dailyAudioEl) {
+                                dailyAudioEl.muted = false;
+                            }
+                        }
+                        const viz = document.getElementById('visualizer-container');
+                        if (viz) {
+                            viz.style.opacity = bargeInEnabled ? '1' : '0.35';
+                            viz.style.filter = bargeInEnabled ? 'none' : 'grayscale(0.6)';
+                        }
+                    }
+                });
+                dailyCall.on('local-audio-level', (e) => {
+                    const level = e && typeof e.level === 'number' ? e.level : 0;
+                    const now = performance.now();
+                    if (!bargeInEnabled) {
+                        return;
+                    }
+                    if (level > 0.1) {
+                        lastLocalSpeechTs = now;
+                        if (dailyAudioEl && !dailyAudioEl.muted) {
+                            dailyAudioEl.muted = true;
+                            localBargeMuted = true;
+                            console.log("Frontend: muted remote audio on local speech");
+                        }
+                        sendDailyAppMessage({ type: "user-interruption" }, "user-interruption");
+                    } else if (localBargeMuted && now - lastLocalSpeechTs > 350) {
+                        if (dailyAudioEl && dailyAudioEl.muted) {
+                            dailyAudioEl.muted = false;
+                            localBargeMuted = false;
+                            console.log("Frontend: unmuted remote audio after local speech");
+                        }
+                    }
+                });
+                dailyCall.on('remote-participants-audio-level', (e) => {
+                    const levelMap = e.participantsAudioLevel || e.levels || {};
+                    const levels = Object.values(levelMap);
+                    const topLevel = levels.length > 0 ? levels[0] : 0;
+                    if (topLevel > 0.05) {
+                        document.body.style.setProperty('--volume', topLevel);
+                    }
+                    const now = performance.now();
+                    if (now - lastAudioLevelLogTs >= 5000) {
+                        lastAudioLevelLogTs = now;
+                        Object.entries(levelMap).forEach(([id, level]) => {
+                            if (level > 0.02) {
+                                debugLog(`DailyAudioLevel: ${id}`, level);
+                            }
+                        });
+                    }
+                });
+                dailyCall.on('track-stopped', (evt) => {
+                    if (evt.track && evt.track.kind === 'audio') {
+                        if (evt.participant && evt.participant.local) {
+                            stopVisualizer();
+                        } else {
+                            console.warn("Remote audio track stopped", evt.track?.id || "");
+                            stopRemoteAudioDiagnostics();
+                        }
+                    }
+                });
+                dailyCall.on('participant-updated', (evt) => {
+                    if (!micStatusText) return;
+                    const isLocal = evt.participant && evt.participant.local;
+                    if (!isLocal) return;
+                    const isMuted = evt.participant.audio === false;
+                    micStatusText.textContent = isMuted ? 'Mic: Off' : 'Mic: On';
+                    micStatusText.style.display = 'block';
+                });
+                await dailyCall.join({
+                    url: data.room_url,
+                    token: data.token,
+                    startVideoOff: true,
+                    startAudioOff: false
+                });
+                setDebugStatus('Join request sent');
+                if (!localAudioObserverStarted && dailyCall.startLocalAudioLevelObserver) {
+                    localAudioObserverStarted = true;
+                    dailyCall.startLocalAudioLevelObserver(100);
+                }
+            } catch (err) {
+                console.error("Failed to start Daily briefing:", err);
+                setDebugStatus(`Start failed: ${err?.message || err}`, true);
+                stopBriefing();
+            }
+        }
+
+        async function stopBriefing(opts = {}) {
+            const { clearBackendCache = true } = opts;
+            if (isStoppingBriefing) return;
+            isStoppingBriefing = true;
+
+            const call = dailyCall;
+            dailyCall = null;
+            window.dailyCall = null;
+            window.call = null;
+
+            if (call) {
+                try {
+                    if (typeof call.setLocalAudio === 'function') {
+                        await call.setLocalAudio(false);
+                    }
+                } catch (e) {
+                    console.warn("Failed to disable local audio before leave:", e);
+                }
+                try { await call.leave(); } catch (e) { }
+                try { await Promise.resolve(call.destroy && call.destroy()); } catch (e) { }
+            }
+
+            if (dailyAudioEl) {
+                try {
+                    dailyAudioEl.pause();
+                    dailyAudioEl.muted = false;
+                    dailyAudioEl.srcObject = null;
+                    dailyAudioEl.load();
+                } catch (e) { }
+            }
+            localBargeMuted = false;
+            stopDailyObservability();
+            stopRemoteAudioDiagnostics();
+            if (micStatusText) {
+                micStatusText.textContent = 'Mic: Off';
+                micStatusText.style.display = 'none';
+            }
+            if (gateStatusText) {
+                gateStatusText.textContent = 'Barge-in: Off';
+                gateStatusText.style.display = 'none';
+            }
+            bargeInEnabled = null;
+            window.isBriefingConnecting = false;
+            stopInboundRtpMonitor();
+            statsPrevInboundBytes = null;
+            statsPrevInboundTs = null;
+            if (cloudRunLoadingTimer) {
+                clearTimeout(cloudRunLoadingTimer);
+                cloudRunLoadingTimer = null;
+            }
+            if (briefingStartTimer) {
+                clearTimeout(briefingStartTimer);
+                briefingStartTimer = null;
+            }
+            if (speakingPendingTimer) {
+                clearInterval(speakingPendingTimer);
+                speakingPendingTimer = null;
+            }
+            speakingPendingSince = null;
+            updateUIState('IDLE');
+            console.log("⏹️ Session ended and state reset.");
+
+            if (clearBackendCache) {
+                try {
+                    await fetch('/api/briefing/stop', { method: 'POST' });
+                    console.log("Briefing cache cleared.");
+                } catch (e) {
+                    console.warn("Failed to clear briefing cache:", e);
+                }
+            }
+            isStoppingBriefing = false;
+        }
+
+
+        function updateUIState(state) {
+            sessionState = state;
+            const btn = document.getElementById('btn-main-action');
+            const icon = document.getElementById('action-icon');
+            const ring = document.getElementById('action-ring');
+            const statusMain = document.getElementById('live-status-text');
+            const statusSub = document.getElementById('live-sub-status');
+            const exitBtn = document.getElementById('btn-exit');
+            const visualizerBox = document.getElementById('visualizer-container');
+
+            // Reset base styles
+            btn.style.opacity = '1';
+            btn.style.cursor = 'pointer';
+            btn.disabled = false;
+            ring.style.opacity = '0';
+            exitBtn.style.display = 'none';
+            visualizerBox.style.display = 'none';
+
+            if (state === 'IDLE') {
+                icon.className = 'fas fa-play';
+                statusMain.innerText = 'Standby: Tap to Start';
+                statusSub.innerText = 'Ready when you are';
+
+            } else if (state === 'CONNECTING') {
+                icon.className = 'fas fa-circle-notch fa-spin';
+                statusMain.innerText = 'Establishing Link...';
+                statusSub.innerText = 'Securing Connection...';
+                btn.style.cursor = 'wait';
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+
+            } else if (state === 'ACTIVE') {
+                icon.className = 'fas fa-microphone';
+                statusMain.innerText = 'Listening';
+                statusSub.innerText = '';
+                btn.disabled = true;
+                btn.style.opacity = '0.6';
+                btn.style.cursor = 'not-allowed';
+
+                // Show visuals
+                ring.style.opacity = '1';
+                exitBtn.style.display = 'block';
+                visualizerBox.style.display = 'block';
+                resizeVisualizerCanvas();
+
+            } else if (state === 'PAUSED') {
+                icon.className = 'fas fa-forward';
+                statusMain.innerText = 'Paused';
+                statusSub.innerText = 'Tap to resume';
+                exitBtn.style.display = 'block';
+                visualizerBox.style.display = 'block';
+                resizeVisualizerCanvas();
+
+            } else if (state === 'SPEAKING') {
+                icon.className = 'fas fa-volume-up';
+                statusMain.innerText = 'Briefing in progress';
+                statusSub.innerText = '';
+
+                ring.style.opacity = '1';
+                exitBtn.style.display = 'block';
+                visualizerBox.style.display = 'none';
+            }
+        }
+
+
+        // --- Audio Playback Logic (Daily WebRTC only) ---
+        let prefetchedBriefingScript = null;
+
+        // --- Visualizer Logic ---
+        function resizeVisualizerCanvas() {
+            const canvas = document.getElementById('mic-visualizer');
+            if (!canvas) return;
+            const rect = canvas.getBoundingClientRect();
+            if (rect.width > 0 && rect.height > 0) {
+                canvas.width = rect.width;
+                canvas.height = rect.height;
+            }
+        }
+
+        function startVisualizer(streamOrTrack) {
+            const canvas = document.getElementById('mic-visualizer');
+            if (!canvas) return;
+
+            // Set canvas resolution to match display size
+            resizeVisualizerCanvas();
+
+            const canvasCtx = canvas.getContext('2d');
+
+            const AudioCtx = window.AudioContext || window.webkitAudioContext;
+            const vizContext = micContext || new AudioCtx();
+            if (!micContext) {
+                micContext = vizContext;
+            }
+            const analyser = vizContext.createAnalyser();
+            analyser.fftSize = 32; // Low FFT = faster performance for debugging
+            analyser.smoothingTimeConstant = 0.8;
+            const bufferLength = analyser.frequencyBinCount;
+            const dataArray = new Uint8Array(bufferLength);
+            const timeData = new Uint8Array(analyser.fftSize);
+            const noiseGate = 18; // Visual-only floor to ignore ambient mic hiss
+
+            const stream = streamOrTrack instanceof MediaStreamTrack
+                ? new MediaStream([streamOrTrack])
+                : streamOrTrack;
+            const source = vizContext.createMediaStreamSource(stream);
+            source.connect(analyser);
+
+            function draw() {
+                visualizerId = requestAnimationFrame(draw);
+                if (vizContext.state === 'suspended') {
+                    vizContext.resume().then(() => console.log('Context resumed'));
+                }
+                if (canvas.width === 0 || canvas.height === 0) {
+                    resizeVisualizerCanvas();
+                    if (canvas.width === 0 || canvas.height === 0) return;
+                }
+                analyser.getByteFrequencyData(dataArray);
+                analyser.getByteTimeDomainData(timeData);
+                let sumSquares = 0;
+                for (let i = 0; i < timeData.length; i++) {
+                    const v = (timeData[i] - 128) / 128;
+                    sumSquares += v * v;
+                }
+                const rms = Math.sqrt(sumSquares / timeData.length);
+                const isSilent = rms < 0.02;
+
+                const bgGradient = canvasCtx.createLinearGradient(0, 0, canvas.width, canvas.height);
+                bgGradient.addColorStop(0, '#0f172a');
+                bgGradient.addColorStop(1, '#111827');
+                canvasCtx.fillStyle = bgGradient;
+                canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+                const barWidth = (canvas.width / bufferLength) * 2.5;
+                let x = 0;
+                const barGradient = canvasCtx.createLinearGradient(0, 0, 0, canvas.height);
+                barGradient.addColorStop(0, 'rgba(129, 140, 248, 0.95)');
+                barGradient.addColorStop(0.5, 'rgba(139, 92, 246, 0.85)');
+                barGradient.addColorStop(1, 'rgba(16, 185, 129, 0.75)');
+
+                for (let i = 0; i < bufferLength; i++) {
+                    const gated = Math.max(0, dataArray[i] - noiseGate);
+                    const barHeight = isSilent ? 0 : gated / 2;
+
+                    // If dataArray[i] is always 0, the mic isn't actually picking up sound
+                    canvasCtx.fillStyle = barGradient;
+                    canvasCtx.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+
+                    x += barWidth + 1;
+                }
+            }
+            draw();
+        }
+
+        function stopVisualizer() {
+            if (visualizerId) cancelAnimationFrame(visualizerId);
+        }
+
+        // Legacy AudioWorklet mic path removed (Daily handles mic + audio)
+
+        // Binary-safe base64 encoding using chunked approach to avoid call stack issues
+        function arrayBufferToBase64(uint8Array) {
+            // Use modern API if available
+            if (uint8Array.toBase64) {
+                return uint8Array.toBase64();
+            }
+            // Fallback: chunk processing to avoid stack overflow on large arrays
+            const CHUNK_SIZE = 0x8000; // 32KB chunks
+            let result = '';
+            for (let i = 0; i < uint8Array.length; i += CHUNK_SIZE) {
+                const chunk = uint8Array.subarray(i, i + CHUNK_SIZE);
+                result += String.fromCharCode.apply(null, chunk);
+            }
+            return btoa(result);
+        }
+
+        function resampleTo16kHz(inputBuffer, inputSampleRate) {
+            // Simple linear interpolation resampling
+            const targetSampleRate = 16000;
+            const ratio = inputSampleRate / targetSampleRate;
+            const outputLength = Math.round(inputBuffer.length / ratio);
+            const output = new Float32Array(outputLength);
+
+            for (let i = 0; i < outputLength; i++) {
+                const srcIndex = i * ratio;
+                const srcIndexFloor = Math.floor(srcIndex);
+                const srcIndexCeil = Math.min(srcIndexFloor + 1, inputBuffer.length - 1);
+                const t = srcIndex - srcIndexFloor;
+                output[i] = inputBuffer[srcIndexFloor] * (1 - t) + inputBuffer[srcIndexCeil] * t;
+            }
+
+            return output;
+        }
+
+        function updateMicUI(isActive) {
+            const btn = document.getElementById('btn-mic');
+            const icon = document.getElementById('mic-icon');
+            const status = document.getElementById('mic-status');
+
+            if (isActive) {
+                // Remove the hardcoded red background from CSS
+                btn.style.background = '';
+                btn.classList.add('listening-glow');
+                icon.textContent = '🔴 Listening...';
+                status.style.display = 'block';
+            } else {
+                btn.classList.remove('listening-glow', 'gemini-active');
+                btn.style.background = '#9F97B8'; // Back to purple for standby
+                icon.textContent = '🎤 Ask Question';
+                status.style.display = 'none';
+            }
+        }
+
+        window.addEventListener('pagehide', () => {
+            try { stopBriefing({ clearBackendCache: false }); } catch (e) { }
+        });
+
+        window.addEventListener('beforeunload', () => {
+            try { stopBriefing({ clearBackendCache: false }); } catch (e) { }
+        });
+        // --- Admin Logic & Persistence ---
+
+        document.addEventListener('DOMContentLoaded', () => {
+            // Auto-load Admin Key
+            const savedKey = localStorage.getItem('admin_api_key');
+            if (savedKey) {
+                const input = document.getElementById('admin-key');
+                if (input) {
+                    input.value = savedKey;
+                    updateAdminUI(); // Unlock immediately
+                }
+            }
+        });
+
+        function updateAdminUI() {
+            const key = document.getElementById('admin-key').value.trim();
+            const btnProcess = document.getElementById('btn-process-video');
+            const btnReload = document.getElementById('btn-reload-feeds');
+            const authCard = document.getElementById('admin-auth-card');
+            const authStatus = document.getElementById('auth-status');
+            const lockIcon = document.getElementById('lock-icon');
+            const keyInput = document.getElementById('admin-key');
+
+            const hasKey = key.length > 0;
+
+            if (hasKey) {
+                // Save to LocalStorage
+                localStorage.setItem('admin_api_key', key);
+
+                // UI: Unlocked
+                authCard.style.borderLeft = "5px solid #48bb78"; // Green
+                authCard.style.background = "#f0fff4";
+
+                keyInput.style.borderColor = "#48bb78";
+                lockIcon.textContent = "🔓";
+                authStatus.textContent = "Unlocked: Ready to perform admin actions";
+                authStatus.style.color = "#2f855a";
+
+                // Enable Buttons
+                btnProcess.disabled = false;
+                btnProcess.style.background = "#4A5568";
+                btnProcess.style.cursor = "pointer";
+                btnProcess.querySelector('span').textContent = "⚡";
+
+                btnReload.disabled = false;
+                btnReload.style.background = "#4A5568";
+                btnReload.style.cursor = "pointer";
+                btnReload.querySelector('span').textContent = "🚀";
+            } else {
+                // Remove from LocalStorage
+                localStorage.removeItem('admin_api_key');
+
+                // UI: Locked
+                authCard.style.borderLeft = "5px solid #e53e3e"; // Red
+                authCard.style.background = "#fff5f5";
+
+                keyInput.style.borderColor = "#fc8181";
+                lockIcon.textContent = "🔒";
+                authStatus.textContent = "Locked: Enter key to proceed";
+                authStatus.style.color = "#e53e3e";
+
+                // Disable Buttons
+                btnProcess.disabled = true;
+                btnProcess.style.background = "#cbd5e0";
+                btnProcess.style.cursor = "not-allowed";
+                btnProcess.querySelector('span').textContent = "🔒";
+
+                btnReload.disabled = true;
+                btnReload.style.background = "#cbd5e0";
+                btnReload.style.cursor = "not-allowed";
+                btnReload.querySelector('span').textContent = "🔒";
+            }
+        }
+
+        // --- Admin Logic ---
+        async function adminAction(action) {
+            const key = document.getElementById('admin-key').value;
+            const resultDiv = document.getElementById('admin-result');
+
+            if (!key) {
+                alert("Please enter Admin API Key");
+                return;
+            }
+
+            resultDiv.textContent = "Processing...";
+            resultDiv.style.color = "blue";
+
+            let url = `/api/admin/${action}`;
+            let options = {
+                method: 'POST',
+                headers: {
+                    'Authorization': `Bearer ${key}`
+                }
+            };
+
+            // Handle Video Processing
+            if (action === 'process-video') {
+                const videoUrl = document.getElementById('admin-video-url').value;
+                const mode = document.getElementById('admin-video-mode').value;
+                if (!videoUrl) {
+                    resultDiv.textContent = "Please enter a YouTube URL";
+                    resultDiv.style.color = "red";
+                    return;
+                }
+                options.headers['Content-Type'] = 'application/json';
+                options.body = JSON.stringify({ url: videoUrl, mock: false, mode: mode });
+            }
+
+            try {
+                const res = await fetch(url, options);
+                const data = await res.json();
+
+                if (res.ok) {
+                    resultDiv.textContent = "Success: " + (data.message || "Action completed");
+                    resultDiv.style.color = "green";
+                    if (action === 'process-video') {
+                        document.getElementById('admin-video-url').value = '';
+                    }
+                } else {
+                    resultDiv.textContent = "Error: " + (data.detail || "Request failed");
+                    resultDiv.style.color = "red";
+                }
+            } catch (e) {
+                console.error(e);
+                resultDiv.textContent = "Network Error";
+                resultDiv.style.color = "red";
+            }
+        }
+
+        // --- Lecture Logic ---
+
+        let chartsInitialized = false;
+        let llmCostChart = null;
+        let llmLatencyChart = null;
+
+        async function loadLLMObservability() {
+            try {
+                const kpiRes = await fetch('/api/llm-observability/kpis?days=7');
+                const kpis = await kpiRes.json();
+
+                document.getElementById('llm-kpis').innerHTML = `
+                    <div class="kpi-card">
+                        <div class="value">${kpis.total_reviews}</div>
+                        <div class="label">Total Reviews (7d)</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value">$${kpis.total_cost}</div>
+                        <div class="label">Total Cost</div>
+                    </div>
+                    <div class="kpi-card">
+                        <div class="value">${kpis.avg_latency}s</div>
+                        <div class="label">Avg Latency</div>
+                    </div>`;
+
+                const tsRes = await fetch('/api/llm-observability/timeseries?days=30');
+                const data = await tsRes.json();
+                const dates = data.map(d => d.date);
+
+                if (!llmCostChart) {
+                    llmCostChart = new Chart(document.getElementById('costChart'), {
+                        type: 'bar',
+                        data: {
+                            labels: dates,
+                            datasets: [{
+                                label: 'Daily Cost ($)',
+                                data: data.map(d => d.cost),
+                                backgroundColor: '#BA8891',
+                                borderRadius: 4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: { title: { display: true, text: 'Cost vs Volume' } }
+                        }
+                    });
+                } else {
+                    llmCostChart.data.labels = dates;
+                    llmCostChart.data.datasets[0].data = data.map(d => d.cost);
+                    llmCostChart.update();
+                }
+
+                if (!llmLatencyChart) {
+                    llmLatencyChart = new Chart(document.getElementById('latencyChart'), {
+                        type: 'line',
+                        data: {
+                            labels: dates,
+                            datasets: [{
+                                label: 'Avg Latency (s)',
+                                data: data.map(d => d.avg_latency),
+                                borderColor: '#39445B',
+                                tension: 0.4
+                            }]
+                        },
+                        options: {
+                            responsive: true,
+                            plugins: { title: { display: true, text: 'System Latency' } }
+                        }
+                    });
+                } else {
+                    llmLatencyChart.data.labels = dates;
+                    llmLatencyChart.data.datasets[0].data = data.map(d => d.avg_latency);
+                    llmLatencyChart.update();
+                }
+            } catch (e) {
+                console.error("Failed to load dashboard:", e);
+                document.getElementById('llm-kpis').innerHTML = `<div class="kpi-card" style="grid-column: span 4; color: red">Failed to load live metrics (check console)</div>`;
+            }
+        }
+
+        async function initLLMDashboard() {
+            if (!chartsInitialized) {
+                chartsInitialized = true;
+            }
+            await loadLLMObservability();
+        }
+
+        // --- Chat Logic ---
+        async function sendMessage() {
+            const input = document.getElementById('user-input');
+            const message = input.value.trim();
+            if (!message) return;
+
+            // Add user message
+            addMessage(message, 'user-message');
+            input.value = '';
+
+            // Show typing indicator
+            const typingId = addMessage('⏳ Thinking...', 'bot-message', true);
+
+            try {
+                const res = await fetch('/api/assistant/query', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        query: message,
+                        filters: {
+                            time_range_days: 7,
+                            min_score: 60
+                        }
+                    })
+                });
+
+                const data = await res.json();
+
+                // Remove typing indicator
+                document.getElementById(typingId).remove();
+
+                // Handle rate limit errors
+                if (res.status === 429 || res.status === 503) {
+                    addMessage(data.detail || "Rate limit reached. Please try again later.", 'bot-message');
+                    return;
+                }
+
+                // Handle greeting response
+                if (data.message) {
+                    addMessage(data.message, 'bot-message');
+                } else if (data.articles && data.articles.length > 0) {
+                    let responseHtml = `<strong>Found ${data.count} articles matching your query:</strong><br><br>`;
+                    responseHtml += data.articles.map(a =>
+                        `<div style="margin-bottom: 8px;">
+                            <a href="${a.url}" target="_blank" style="font-weight:bold;">${a.title}</a>
+                            <div style="font-size:0.85em; color:#555;">${a.summary ? a.summary.substring(0, 100) + '...' : ''}</div>
+                        </div>`
+                    ).join('');
+
+                    addMessage(responseHtml, 'bot-message');
+                } else if (data.count === 0) {
+                    addMessage("No articles found for that query. Try asking about LLMs, Kubernetes, Airflow, Python, or other developer topics.", 'bot-message');
+                } else {
+                    addMessage(data.answer || "I encountered an issue processing your request.", 'bot-message');
+                }
+
+            } catch (e) {
+                document.getElementById(typingId).remove();
+                addMessage("Sorry, I'm having trouble connecting to the AI service right now.", 'bot-message');
+                console.error(e);
+            }
+        }
+
+        function addMessage(text, className, isTyping = false) {
+            const container = document.getElementById('chat-messages');
+            const div = document.createElement('div');
+            div.className = `message ${className}`;
+            div.innerHTML = text;
+            if (isTyping) div.id = 'typing-' + Date.now();
+            container.appendChild(div);
+            container.scrollTop = container.scrollHeight;
+            return div.id;
+        }
+
+        function handleKeyPress(e) {
+            if (e.key === 'Enter') sendMessage();
+        }
+
+
+
+        function renderArticleCard(article, isFresh) {
+            const scoreColor = article.scores.final > 80 ? '#9F97B8' : (article.scores.final > 50 ? '#ecc94b' : '#39445B');
+            const freshBadge = isFresh ? `<span style="background:#9F97B8; color:white; font-size:0.7rem; padding:2px 6px; border-radius:4px; margin-right:5px; font-weight:bold;">FRESH</span>` : '';
+
+            // New AI Fields (capitalize for display)
+            const actionabilityRaw = article.actionability || 'unknown';
+            const actionability = actionabilityRaw.charAt(0).toUpperCase() + actionabilityRaw.slice(1);
+            const readTimeRaw = article.estimated_read_time || 'medium';
+            const readTime = readTimeRaw.charAt(0).toUpperCase() + readTimeRaw.slice(1);
+            const reasoning = article.ai_reasoning || 'AI analysis pending...';
+            const contentType = article.content_type ? `<span style="background:#edf2f7; color:#4a5568; padding:2px 6px; border-radius:12px; font-size:0.7rem; margin-right:5px;">${article.content_type.toUpperCase()}</span>` : '';
+            let summaryText = article.summary ? stripHtml(article.summary) : '';
+            // Clean up HN metadata
+            summaryText = summaryText.replace(/Article URL:.*$/mi, '')
+                .replace(/Comments URL:.*$/mi, '')
+                .replace(/Points:.*$/mi, '')
+                .replace(/# Comments:.*$/mi, '')
+                .trim();
+
+            // Only show summary if meaningful content remains
+            const summaryBlock = summaryText.length > 10 ?
+                `<p style="font-size:0.9rem; color:#4a5568; line-height:1.5; margin-bottom:10px;">${summaryText.substring(0, 200) + (summaryText.length > 200 ? '...' : '')}</p>`
+                : '';
+
+            return `
+            <div class="article-card" style="background:white; padding:15px; border-radius:8px; border:1px solid #e2e8f0; box-shadow:0 1px 3px rgba(0,0,0,0.1); margin-bottom:15px; transition: transform 0.2s;">
+                <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:8px;">
+                    <div style="font-size:0.75rem; color:#718096; display:flex; align-items:center;">
+                        ${freshBadge}
+                        ${contentType}
+                        <span title="High = actionable today (code, configs) | Medium = useful patterns | Low = informational" style="background:${actionability === 'High' ? '#ede9f5' : '#edf2f7'}; color:${actionability === 'High' ? '#39445B' : '#4a5568'}; padding:2px 6px; border-radius:4px; margin-right:5px; font-size:0.7rem;">${actionability} Impact</span>
+                        <span style="background:#eef0f2; color:#4a5568; padding:2px 6px; border-radius:4px; font-size:0.7rem;">⏱️ ${readTime}</span>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="display:flex; gap:12px; justify-content:flex-end;">
+                            ${currentFeedId === 'water_cooler' ? `
+                                <!-- Watercooler Specific Metrics -->
+                                <div style="text-align:center;" title="Lobsters Points">
+                                    <span style="display:block; font-size:1.0rem; font-weight:bold; color:#ac2a18;">🦞 ${article.social_proof?.lobsters_points || 0}</span>
+                                    <span style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">Lobsters</span>
+                                </div>
+                                <div style="text-align:center;" title="Hacker News Points">
+                                    <span style="display:block; font-size:1.0rem; font-weight:bold; color:#ff6600;">🔶 ${article.social_proof?.hn_points || 0}</span>
+                                    <span style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">HN Pts</span>
+                                </div>
+                                <div style="text-align:center; padding-left:10px; border-left:1px solid #eee;" title="Total Comments">
+                                    <span style="display:block; font-size:1.1rem; font-weight:bold; color:#2d3748;">💬 ${(article.social_proof?.hn_comments || 0) + (article.social_proof?.lobsters_comments || 0)}</span>
+                                    <span style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">Discuss</span>
+                                </div>
+                            ` : `
+                                <!-- Standard AI Metrics -->
+                                <div style="text-align:center;" title="Topic Match: How well this matches your defined interests">
+                                    <span style="display:block; font-size:1.0rem; font-weight:bold; color:#39445B;">🤖 ${article.scores.ai_relevance}</span>
+                                    <span style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">AI</span>
+                                </div>
+                                <div style="text-align:center;" title="Social Proof: Combined signal from communities">
+                                    <span style="display:block; font-size:1.0rem; font-weight:bold; color:#ed8936;">👥 ${article.scores.community}</span>
+                                    <span style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">Comm</span>
+                                </div>
+                                <div style="text-align:center; padding-left:10px; border-left:1px solid #eee;" title="Final Score">
+                                    <span style="display:block; font-size:1.1rem; font-weight:bold; color:${scoreColor};">⭐ ${article.scores.final}</span>
+                                    <span style="font-size:0.6rem; color:#a0aec0; text-transform:uppercase;">Final</span>
+                                </div>
+                            `}
+                        </div>
+                    </div>
+                </div>
+
+                <h4 style="margin:0 0 8px 0; font-size:1.1rem; line-height:1.4;">
+                    <a href="${article.url}" target="_blank" style="text-decoration:none; color:#2d3748; font-weight:600;">${article.title}</a>
+                </h4>
+
+                ${summaryBlock}
+
+                <div style="background:#f7fafc; padding:8px; border-radius:4px; border-left:3px solid ${scoreColor}; font-size:0.85rem; color:#4a5568; font-style:italic;">
+                    " ${reasoning} "
+                </div>
+
+                ${(article.social_proof && (article.social_proof.hn_url || article.social_proof.lobsters_url)) ? `
+                <div style="margin-top:10px; padding-top:8px; border-top:1px solid #edf2f7; font-size:0.75rem; display:flex; gap:12px; align-items:center;">
+                    <span style="color:#a0aec0;">Discuss:</span>
+                    ${article.social_proof.hn_url ? `<a href="${article.social_proof.hn_url}" target="_blank" style="color:#ff6600; text-decoration:none;" title="Hacker News Discussion">🔶 Hacker News</a>` : ''}
+                    ${article.social_proof.lobsters_url ? `<a href="${article.social_proof.lobsters_url}" target="_blank" style="color:#ac2a18; text-decoration:none;" title="Lobsters Discussion">🦞 Lobsters</a>` : ''}
+                </div>` : ''}
+            </div>`;
+        }
+
+        // --- Feed Switcher Logic ---
+
+        let currentFeedId = 'daily_reads'; // Default
+
+        async function initFeedSwitcher() {
+            const tabsContainer = document.getElementById('feed-tabs');
+
+            try {
+                // 1. Fetch available feeds metadata
+                const res = await fetch('/api/feeds');
+                const data = await res.json();
+
+                // 2. Render Tabs
+                if (data.feeds && data.feeds.length > 0) {
+                    tabsContainer.innerHTML = data.feeds.map(feed =>
+                        `<button class="feed-tab ${feed.id === currentFeedId ? 'active' : ''}" 
+                                 onclick="loadFeed('${feed.id}')" 
+                                 title="${feed.description}"
+                                 data-id="${feed.id}">
+                            <span>${feed.icon}</span> ${feed.name}
+                        </button>`
+                    ).join('');
+
+                    // Load default feed
+                    loadFeed(currentFeedId);
+                }
+
+                // Load default feed
+                loadFeed(currentFeedId);
+            } catch (e) {
+                console.error("Failed to init feeds:", e);
+                tabsContainer.innerHTML = `<div style="color:red">Failed to load feed configurations.</div>`;
+            }
+        }
+
+        async function loadFeed(feedId) {
+            currentFeedId = feedId;
+
+            // Update UI state
+            document.querySelectorAll('.feed-tab').forEach(t => {
+                t.classList.toggle('active', t.dataset.id === feedId);
+            });
+
+            const loader = document.getElementById('feed-content-loader');
+            const container = document.getElementById('feed-articles-container');
+            const infoPanel = document.getElementById('feed-info-panel');
+
+            loader.style.display = 'block';
+            container.innerHTML = '';
+            infoPanel.style.display = 'none';
+
+            try {
+                // Fetch articles
+                const res = await fetch(`/api/feeds/${feedId}?limit=20`);
+                if (!res.ok) throw new Error("API Error");
+
+                const data = await res.json();
+
+                // Update Info Panel
+                if (data.feed) {
+                    infoPanel.style.display = 'block';
+                    infoPanel.innerHTML = `
+                        <h3>${data.feed.icon} ${data.feed.name}</h3>
+                        <p><strong>Goal:</strong> ${data.feed.purpose}</p>
+                        <p style="margin-top:5px; font-size:0.9em; opacity:0.8;">ℹ️ ${data.feed.use_case}</p>
+                    `;
+                }
+
+                if (!data.articles || data.articles.length === 0) {
+                    loader.style.display = 'none';
+                    container.innerHTML = `<div style="text-align:center; padding:20px; grid-column:1/-1;">No articles found for this feed right now.</div>`;
+                    return;
+                }
+
+                loader.style.display = 'none';
+
+                // Render Articles
+                const now = new Date();
+                const oneDayAgo = new Date(now - 24 * 60 * 60 * 1000);
+                data.articles.forEach(article => {
+                    const isFresh = article.scored_at && new Date(article.scored_at) > oneDayAgo;
+                    container.innerHTML += renderArticleCard(article, isFresh);
+                });
+
+            }
+
+            catch (e) {
+                console.error("Feed load error:", e);
+                loader.innerText = "Error loading feed items. Please try again.";
+            }
+        }
+
+        function stripHtml(html) {
+            if (!html) return '';
+            const tmp = document.createElement("DIV");
+            tmp.innerHTML = html;
+            return tmp.textContent || tmp.innerText || "";
+        }
+
+        // Deprecated renderRichArticleCard - unifying to renderArticleCard
+        // function renderRichArticleCard(article) { ... }
+
+
+        // --- Lecture Logic ---
+        async function loadLectures() {
+            const container = document.getElementById('lecture-result');
+            container.innerHTML = '<div style="text-align:center; padding:20px; color:#666;">Loading library...</div>';
+
+            try {
+                const res = await fetch('/api/lectures');
+                const data = await res.json();
+
+                if (!data.lectures || data.lectures.length === 0) {
+                    container.innerHTML = '<div style="text-align:center; padding:40px; color:#666;">No video lectures processed yet. Add one via Admin!</div>';
+                    return;
+                }
+
+                container.innerHTML = data.lectures.map(l => {
+                    const date = new Date(l.created_at).toLocaleDateString("en-US", {
+                        year: 'numeric', month: 'short', day: 'numeric'
+                    });
+
+                    return `
+                    <div class="lecture-card" style="display:flex; flex-direction:column; padding:0; background:white; border-radius:12px; border:1px solid #e2e8f0; margin-bottom:20px; transition:transform 0.2s; overflow:hidden;">
+                        <div style="padding:20px; display:flex; gap:20px;">
+                            <div style="flex:1;">
+                                <h3 style="margin:0 0 10px 0; font-size:1.25rem;">
+                                    <a href="/lectures/${l.article_id}" style="text-decoration:none; color:#2d3748; font-weight:700;">${l.title}</a>
+                                </h3>
+                                <div style="display:flex; gap:10px; margin-bottom:12px; font-size:0.85rem; color:#718096;">
+                                     <span style="background:#edf2f7; padding:2px 8px; border-radius:4px;">📅 ${date}</span>
+                                </div>
+                                <p style="color:#4a5568; font-size:0.95em; line-height:1.6; margin-bottom:15px;">
+                                    ${l.summary ? l.summary.substring(0, 200) + '...' : 'No summary available.'}
+                                </p>
+                                
+                                <div style="display:flex; align-items:center; justify-content:space-between; border-top:1px solid #edf2f7; padding-top:15px; margin-top:5px;">
+                                    <div style="display:flex; gap:15px;">
+                                        <a href="/lectures/${l.article_id}" style="background:#88B3BA; color:white; padding:8px 16px; border-radius:6px; font-weight:600; text-decoration:none; font-size:0.9em; transition:opacity 0.2s;">
+                                            📄 View Full Notes
+                                        </a>
+                                        <a href="${l.url}" target="_blank" style="color:#4a5568; padding:8px 16px; font-weight:500; text-decoration:none; font-size:0.9em; display:flex; align-items:center; gap:5px; border:1px solid #e2e8f0; border-radius:6px; background:#f7fafc;">
+                                            📺 Original Video
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `}).join('');
+
+            } catch (e) {
+                console.error("Lecture load failed", e);
+                container.innerHTML = '<div style="text-align:center; color:#e53e3e; padding:20px;">Failed to load lectures.</div>';
+            }
+        }
+
+        // --- Tab Switching Logic (Overrides inline onclicks) ---
+        window.switchTab = function (tabId, event) {
+            // Hide all tabs
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.tab').forEach(el => el.classList.remove('active'));
+
+            // Show selected
+            const content = document.getElementById(tabId);
+            if (content) content.classList.add('active');
+
+            // Update button state 
+            if (event && event.currentTarget) {
+                event.currentTarget.classList.add('active');
+            }
+
+            // Lazy Load Logic
+            if (tabId === 'lectures') {
+                loadLectures();
+            }
+            if (tabId === 'llm-observability') {
+                initLLMDashboard();
+                startBriefingObservability();
+            } else {
+                stopBriefingObservability();
+            }
+            if (tabId === 'briefing') {
+                loadBriefingScript();
+            }
+        }
+
+        // Initialize on load
+        initFeedSwitcher();
+        loadBriefingScript(); // Pre-load briefing script for default tab
+    </script>
+</body>
+
+</html>

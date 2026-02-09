@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Content Sources - Content Intelligence Platform</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        h1 {
+            margin: 0 0 10px 0;
+            color: #1a1a1a;
+        }
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin: 20px 0;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 36px;
+            font-weight: bold;
+            color: #0066cc;
+        }
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+        }
+        .category {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .category-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .category-title {
+            font-size: 20px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+        .feed-count {
+            background: #e3f2fd;
+            color: #0066cc;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .feed-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .feed-item {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+        }
+        .feed-item:last-child {
+            border-bottom: none;
+        }
+        .feed-title {
+            font-weight: 500;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+        .feed-description {
+            font-size: 14px;
+            color: #666;
+        }
+        .actions {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .button {
+            display: inline-block;
+            padding: 12px 24px;
+            background: #0066cc;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: 500;
+            margin: 0 10px;
+        }
+        .button:hover {
+            background: #0052a3;
+        }
+        .button-secondary {
+            background: #f5f5f5;
+            color: #1a1a1a;
+        }
+        .button-secondary:hover {
+            background: #e0e0e0;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>📚 Content Sources</h1>
+        <p>The RSS feeds that power my Content Intelligence Platform</p>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-number">106</div>
+                <div class="stat-label">Total Feeds</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">11</div>
+                <div class="stat-label">Categories</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">~1,200</div>
+                <div class="stat-label">Articles/Day</div>
+            </div>
+            <div class="stat">
+                <div class="stat-number">10-20</div>
+                <div class="stat-label">Curated Daily</div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Categories loaded dynamically -->
+    <div id="categories"></div>
+    
+    <div class="actions">
+        <a href="/api/sources/opml" class="button" download="content-intelligence-feeds.opml">
+            Download OPML
+        </a>
+        <a href="https://github.com/YOUR_USERNAME/awesome-data-engineering-feeds" class="button button-secondary" target="_blank">
+            View on GitHub
+        </a>
+    </div>
+    
+    <script>
+        // Load feeds from API
+        fetch('/api/sources')
+            .then(response => response.json())
+            .then(data => {
+                const container = document.getElementById('categories');
+                
+                Object.entries(data.by_category).forEach(([category, feeds]) => {
+                    const categoryDiv = document.createElement('div');
+                    categoryDiv.className = 'category';
+                    
+                    categoryDiv.innerHTML = `
+                        <div class="category-header">
+                            <div class="category-title">${category}</div>
+                            <div class="feed-count">${feeds.length} feeds</div>
+                        </div>
+                        <ul class="feed-list">
+                            ${feeds.map(feed => `
+                                <li class="feed-item">
+                                    <div class="feed-title">
+                                        <a href="${feed.html_url}" target="_blank">${feed.title}</a>
+                                    </div>
+                                    ${feed.description ? `<div class="feed-description">${feed.description}</div>` : ''}
+                                </li>
+                            `).join('')}
+                        </ul>
+                    `;
+                    
+                    container.appendChild(categoryDiv);
+                });
+            });
+    </script>
+</body>
+</html>

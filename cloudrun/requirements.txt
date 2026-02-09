@@ -1,0 +1,38 @@
+# Core dependencies
+fastapi>=0.109.0
+uvicorn[standard]>=0.27.0
+pydantic>=2.5.0
+google-cloud-bigquery>=3.14.0
+google-cloud-firestore>=2.14.0
+cachetools>=5.3.0
+python-multipart>=0.0.6
+
+# Rate limiting
+slowapi>=0.1.9
+
+# HTTP requests (for community scorer)
+requests>=2.31.0
+
+# Testing
+pytest>=8.0.0
+httpx>=0.26.0
+
+# Google Client dependencies
+google-auth>=2.0.0
+requests>=2.31.0
+google-cloud-monitoring>=2.19.0
+google-cloud-aiplatform>=1.38.0
+google-cloud-secret-manager>=2.16.0
+
+# OpenTelemetry (DISABLED - Caused Startup Failure)
+# opentelemetry-api
+# opentelemetry-sdk
+# opentelemetry-instrumentation-fastapi
+# opentelemetry-exporter-gcp-trace
+# Gemini 3.0 / Live
+websockets>=12.0
+google-genai>=0.2.1
+
+# Video processing (Lectures)
+yt-dlp>=2024.1.0
+google-cloud-storage>=2.14.0
