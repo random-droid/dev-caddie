@@ -30,7 +30,7 @@ Real-time voice briefings powered by **Gemini Live 2.5 Flash** with barge-in Q&A
 
 ---
 
-## Content Intelligence Hub
+## Smart Feed Hub
 
 ![Architecture Banner](cloudrun/static/images/architecture_banner.png)
 
