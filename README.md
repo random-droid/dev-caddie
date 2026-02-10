@@ -1,15 +1,45 @@
-# Content Intelligence Hub
+# Dev Caddie
+
+> AI-powered content curation + voice briefings for engineers who don't have time to read everything
+
+**Live Demo:** [devcaddie.com](https://devcaddie.com)
+
+---
+
+## Voice Briefing Service
+
+![Briefing Service Workflow](cloudrun/static/images/briefing_service_workflow.png)
+
+Real-time voice briefings powered by **Gemini Live 2.5 Flash** with barge-in Q&A capability.
+
+### How It Works
+
+1. **Script Generation** - Airflow generates daily briefing scripts from top-scored articles
+2. **Voice Synthesis** - Gemini Live converts scripts to natural audio via Pipecat + Daily WebRTC
+3. **Barge-in Q&A** - Users can interrupt mid-briefing to ask questions about articles
+4. **State Sync** - UI shows "Listening" vs "Speaking" states for seamless interaction
+
+### Key Features
+
+| Feature | Implementation |
+|---------|----------------|
+| **Deterministic Narration** | Pre-generated scripts for consistent delivery |
+| **Live Q&A** | `allow_interruptions` toggle for barge-in |
+| **Zero Latency** | WebRTC via Daily.co for real-time audio |
+| **Cost: ~$0** | Vertex AI free tier (15 hrs audio/month) |
+
+---
+
+## Content Intelligence Hub
 
 ![Architecture Banner](cloudrun/static/images/architecture_banner.png)
 
 > AI Agent-powered content curation with autonomous scoring and community validation
 
-**Live Demo:** https://YOUR-APP-URL.run.app  
-**Blog Post:** [Dev.to article link]
 
 ## 🎯 The Problem
 
-As a software engineer, I was drowning in 500+ tech articles daily from 
+As a software engineer, I was drowning in 100+ tech articles daily from 
 50+ sources. 99% were noise. I needed AI to surface the signal.
 
 ## 💡 The Solution
@@ -37,16 +67,53 @@ This is a **Single-Agent Pipeline** orchestrated by Airflow:
 
 ## 🏗️ Architecture
 
+```
+RSS Feeds (106 feeds via OPML)
+       ↓
+Airflow DAG (daily @ 13:00 UTC)
+       ↓
+┌──────────────────────────────────────────────────────────────┐
+│  SCORING PIPELINE                                            │
+│  ├─ Fetch & Dedupe (SHA-256 URL hashes)                      │
+│  ├─ AI Scoring (Gemini 2.5 Flash → structured JSON)          │
+│  ├─ Community Enrichment (HN Algolia + Lobste.rs APIs)       │
+│  └─ Final Score = weighted(AI, Community) + viral override   │
+└──────────────────────────────────────────────────────────────┘
+       ↓
+BigQuery (articles_scored, daily_briefings, lecture_notes)
+       ↓
+┌──────────────────────────────────────────────────────────────┐
+│  DELIVERY LAYER                                              │
+│  ├─ Cloud Run API (FastAPI + static UI)                      │
+│  ├─ Voice Briefing (Sidecar VM: Pipecat + Daily + Gemini)    │
+│  ├─ Feed Assistant (NL → StruQ → BigQuery)                   │
+│  └─ Video Lecture Notes (Gemini vision + GCS snapshots)      │
+└──────────────────────────────────────────────────────────────┘
+```
+
+### Components
+
+| Component | Technology | Cost |
+|-----------|------------|------|
+| **Orchestration** | Apache Airflow 2.8 on GCE | ~$20/mo |
+| **Backend** | FastAPI on Cloud Run | ~$0 (free tier) |
+| **AI Scoring** | Gemini 2.5 Flash (Vertex AI) | ~$1/mo |
+| **Voice Briefing** | Gemini Live + Pipecat + Daily WebRTC | ~$0 (free tier) |
+| **Storage** | BigQuery + Firestore + GCS | ~$0 (free tier) |
+
+<details>
+<summary>Detailed Architecture (click to expand)</summary>
+
 ```text
 ┌─────────────────────────────────────────────────────────────────────────────────────────────────┐
-│              CONTENT INTELLIGENCE PLATFORM + BRIEFING SERVICE EXTENSION                          │
+│                       CONTENT INTELLIGENCE PLATFORM - AGENTIC WORKFLOW                          │
 │                              Airflow-Orchestrated AI Pipeline                                   │
 ├─────────────────────────────────────────────────────────────────────────────────────────────────┤
 │                                                                                                 │
 │  ┌────────────────────────────────────────────────────────────────────────────────────────┐   │
 │  │                              EXTERNAL DATA SOURCES                                      │   │
 │  │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐              │   │
-│  │  │ Dev.to RSS   │  │ Hashnode RSS │  │ Medium RSS   │  │ HN RSS       │              │   │
+│  │  │    RSS       │  │ Hashnode RSS │  │ Medium RSS   │  │ HN RSS       │              │   │
 │  │  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘  └──────┬───────┘              │   │
 │  │         │                 │                 │                 │                        │   │
 │  │         └─────────────────┴─────────────────┴─────────────────┘                        │   │
@@ -224,7 +291,7 @@ This is a **Single-Agent Pipeline** orchestrated by Airflow:
 │                                         ▼                                                       │
 │  ┌────────────────────────────────────────────────────────────────────────────────────────┐   │
 │  │                            GEMINI API (AI Processing)                                   │   │
-│  │                                  Free Tier                                              │   │
+│  │                                  $6/month                                               │   │
 │  │  ┌────────────────────────────────────────────────────────────────────────────────┐    │   │
 │  │  │  Model: Gemini 1.5 Flash                                                       │    │   │
 │  │  │                                                                                 │    │   │
@@ -318,7 +385,7 @@ This is a **Single-Agent Pipeline** orchestrated by Airflow:
 │  │  │  After trial expires:                                                          │    │   │
 │  │  │  ├─ Remove Datadog agent                                                      │    │   │
 │  │  │  ├─ Keep Google Cloud Ops (free forever)                                      │    │   │
-│  │  │  └─ Portfolio stays live at $35/month                                         │    │   │
+│  │  │  └─ Portfolio stays live at $25/month                                         │    │   │
 │  │  │                                                                                 │    │   │
 │  │  └─────────────────────────────────────────────────────────────────────────────────┘    │   │
 │  └──────────────────────────────────────────────────────────────────────────────────────────┘   │
@@ -326,19 +393,8 @@ This is a **Single-Agent Pipeline** orchestrated by Airflow:
 └─────────────────────────────────────────────────────────────────────────────────────────────────┘
 ```
 
-- **Airflow** (self-hosted on GCE) - Orchestrates data pipeline
-- **Cloud Run** - Serverless AI assistant API
-- **BigQuery** - Data warehouse (30K+ articles)
-- **Gemini AI** - LLM-powered relevance scoring
+</details>
 
-## 🎮 Try It Live
-
-Visit: https://content-hub-xyz.run.app
-
-Try these queries:
-- "What should I read today? I have 30 minutes"
-- "Show me trending Kubernetes articles"
-- "Analyze this article: [paste URL]"
 
 ## 📊 Key Features
 
@@ -378,8 +434,7 @@ Try these queries:
 - **Total cost**: $25/month
 
 
-
-## 🏆 Gemini 3 Challenge 2026
+## 🏆 Gemini 3 Challenge 2025
 
 Built for the New Year, New You Portfolio Challenge.
 
