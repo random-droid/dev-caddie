@@ -436,7 +436,6 @@ BigQuery (articles_scored, daily_briefings, lecture_notes)
 
 ## 🏆 Gemini 3 Challenge 2025
 
-Built for the New Year, New You Portfolio Challenge.
 
 **What I Learned:**
 - Agentic workflow design (Scoring Agent + orchestration)
